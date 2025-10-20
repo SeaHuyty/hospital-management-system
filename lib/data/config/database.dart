@@ -23,6 +23,9 @@ class DatabaseHelper {
     }
     
     String path = join(dbDir.path, 'hospital.db');
+
+    createTablesIfNotExists();
+
     return sqlite3.open(path);
   }
 
@@ -35,6 +38,30 @@ class DatabaseHelper {
     } catch (error) {
       print('Database connection error: $error');
       return false;
+    }
+  }
+
+  Future<void> createTablesIfNotExists() async {
+    final db = await database;
+
+    try {
+      db.execute('''
+        CREATE TABLE IF NOT EXISTS staff (
+          id INTEGER PRIMARY KEY,
+          first_name TEXT NOT NULL,
+          last_name TEXT NOT NULL,
+          date_of_birth TEXT NOT NULL,
+          gender TEXT NOT NULL,
+          phone TEXT NOT NULL,
+          email TEXT,
+          address TEXT,
+          emergency_contact_name TEXT,
+          emergency_contact_phone TEXT,
+          
+        )
+      ''');
+    } catch (error) {
+      print('Error creating staff table: $error');
     }
   }
 }
