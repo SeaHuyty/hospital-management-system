@@ -45,9 +45,10 @@ class DatabaseHelper {
     final db = await database;
 
     try {
+      // Base staff table
       db.execute('''
         CREATE TABLE IF NOT EXISTS staff (
-          id INTEGER PRIMARY KEY,
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
           first_name TEXT NOT NULL,
           last_name TEXT NOT NULL,
           date_of_birth TEXT NOT NULL,
@@ -57,7 +58,58 @@ class DatabaseHelper {
           address TEXT,
           emergency_contact_name TEXT,
           emergency_contact_phone TEXT,
-          
+          hire_date TEXT NOT NULL,
+          employment_status TEXT CHECK(employment_status IN('active', 'leave', 'terminated')),
+          shift TEXT NOT NULL,
+          salary REAL NOT NULL,
+          staff_type TEXT NOT NULL,
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL
+        )
+      ''');
+
+      // Doctor-specific table
+      db.execute('''
+        CREATE TABLE IF NOT EXISTS doctors (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          staff_id INTEGER NOT NULL,
+          specialization TEXT NOT NULL,
+          license_number TEXT NOT NULL,
+          qualification TEXT NOT NULL,
+          FOREIGN KEY (staff_id) REFERENCES staff(id) ON DELETE CASCADE
+        )
+      ''');
+
+      // Nurse-specific table
+      db.execute('''
+        CREATE TABLE IF NOT EXISTS nurses (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          staff_id INTEGER NOT NULL,
+          department TEXT NOT NULL,
+          certification TEXT NOT NULL,
+          FOREIGN KEY (staff_id) REFERENCES staff(id) ON DELETE CASCADE
+        )
+      ''');
+
+      // Security-specific table
+      db.execute('''
+        CREATE TABLE IF NOT EXISTS security (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          staff_id INTEGER NOT NULL,
+          title TEXT NOT NULL,
+          assigned_area TEXT NOT NULL,
+          FOREIGN KEY (staff_id) REFERENCES staff(id) ON DELETE CASCADE
+        )
+      ''');
+
+      // Cleaner-specific table
+      db.execute('''
+        CREATE TABLE IF NOT EXISTS cleaners (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          staff_id INTEGER NOT NULL,
+          title TEXT NOT NULL,
+          assigned_area TEXT NOT NULL,
+          FOREIGN KEY (staff_id) REFERENCES staff(id) ON DELETE CASCADE
         )
       ''');
     } catch (error) {
