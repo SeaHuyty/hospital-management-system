@@ -59,7 +59,7 @@ class DatabaseHelper {
           emergency_contact_name TEXT,
           emergency_contact_phone TEXT,
           hire_date TEXT NOT NULL,
-          employment_status TEXT CHECK(status IN('active', 'leave', 'terminated')),
+          employment_status TEXT CHECK(employment_status IN('active', 'leave', 'terminated')),
           shift TEXT NOT NULL,
           salary REAL NOT NULL,
           staff_type TEXT NOT NULL,
