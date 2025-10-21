@@ -98,7 +98,7 @@ class DatabaseHelper {
           staff_id INTEGER NOT NULL,
           title TEXT NOT NULL,
           assigned_area TEXT NOT NULL,
-          FOREIGN KEY (staff_id) REFERENECES staff(id) ON DELETE CASCADE
+          FOREIGN KEY (staff_id) REFERENCES staff(id) ON DELETE CASCADE
         )
       ''');
 
