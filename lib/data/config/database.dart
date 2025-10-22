@@ -24,7 +24,7 @@ class DatabaseHelper {
     
     String path = join(dbDir.path, 'hospital.db');
 
-    createTablesIfNotExists();
+    await createTablesIfNotExists();
 
     return sqlite3.open(path);
   }
@@ -108,8 +108,28 @@ class DatabaseHelper {
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           staff_id INTEGER NOT NULL,
           title TEXT NOT NULL,
+          assigned_department TEXT NOT NULL,
           assigned_area TEXT NOT NULL,
           FOREIGN KEY (staff_id) REFERENCES staff(id) ON DELETE CASCADE
+        )
+      ''');
+
+      db.execute('''
+        CREATE TABLE IF NOT EXISTS administrators (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          staff_id INTEGER NOT NULL,
+          username TEXT NOT NULL,
+          password TEXT NOT NULL,
+          FOREIGN KEY (staff_id) REFERENCES staff(id) ON DELETE CASCADE
+        )
+      ''');
+
+      db.execute('''
+        CREATE TABLE IF NOT EXISTS logs (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          username TEXT NOT NULL,
+          action TEXT NOT NULL,
+          time TEXT NOT NULL,
         )
       ''');
     } catch (error) {
