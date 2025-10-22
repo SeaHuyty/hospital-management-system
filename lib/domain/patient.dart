@@ -1,7 +1,3 @@
-import 'package:uuid/uuid.dart';
-
-var uuid = Uuid();
-
 class Address {
   final String _commune;
   final String _district;
@@ -20,17 +16,28 @@ class Address {
 }
 
 class Patient {
-  final String _id;
+  final String? _id;
   final String _name;
   final int _age;
   final String _gender;
   final String _nationality;
   final Address _address;
 
-  Patient(this._name, this._age, this._gender, this._nationality, this._address)
-    : _id = uuid.v4();
+  Patient({
+    String? id,
+    required String name,
+    required int age,
+    required String gender,
+    required String nationality,
+    required Address address,
+  }) : _id = id,
+       _name = name,
+       _age = age,
+       _gender = gender,
+       _nationality = nationality,
+       _address = address;
 
-  String get id => _id;
+  String? get id => _id;
   String get name => _name;
   int get age => _age;
   String get gender => _gender;
