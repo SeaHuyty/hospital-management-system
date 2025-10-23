@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:async';
+import './staff_console.dart';
 
 class HospitalConsole {
   void clearScreen() {
@@ -42,7 +42,7 @@ class HospitalConsole {
 
       switch (choice) {
         case 1:
-          //
+          staffConsole();
           break;
         case 2:
           //
