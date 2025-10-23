@@ -244,7 +244,7 @@ class Security extends Staff {
         employmentStatus: '',
         shift: '',
         salary: 0.0,
-        staffType: StaffType.cleaner
+        staffType: StaffType.security
        );
   
   @override
