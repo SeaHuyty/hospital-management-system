@@ -70,17 +70,10 @@ class Staff {
     print('DOB: $_dateOfBirth');
     print('Gender: $_gender');
     print('Phone: $_phone');
-    if (_email != null) {
-      print('Email: $_email');
-    } else {
-      print('Email: Blank');
-    }
-    if (_address != null) {
-      print('Address: $_address');
-    }
-    if (_emergencyContactName != null && _emergencyContactPhone != null) {
-      print('Emergency Contact: $_emergencyContactName - $_emergencyContactPhone');
-    }
+    print(_email == null ? 'Email: Blank' : 'Email: $_email');
+    print(_address == null ? 'Address: Blank' : 'Address: $_address');
+    (_emergencyContactName == null && _emergencyContactPhone == null) ?
+      print('Emergency Contact: Blank') : print('Emergency Contact: $_emergencyContactName - $_emergencyContactPhone');
     print('Hire Date: $_hireDate');
     print('Employment Status: $_employmentStatus');
     print('Shift: $_shift');
@@ -121,6 +114,28 @@ class Doctor extends Staff {
         _qualification = qualification,
         super(staffType: StaffType.doctor);
 
+  Doctor.fromDatabase({
+    required String specialization,
+    required String licenseNumber,
+    required String qualification,
+    required int staffId
+  }) : _specialization = specialization,
+       _licenseNumber = licenseNumber,
+       _qualification = qualification,
+       super(
+        id: staffId,
+        firstName: '',
+        lastName: '',
+        dateOfBirth: DateTime.now(),
+        gender: '',
+        phone: '',
+        hireDate: DateTime.now(),
+        employmentStatus: '',
+        shift: '',
+        salary: 0.0,
+        staffType: StaffType.doctor
+       );
+
   @override
   void printDetails() {
     print('Staff ID: $_id');
@@ -157,6 +172,26 @@ class Nurse extends Staff {
        _certification = certification,
        super(staffType: StaffType.nurse);
 
+  Nurse.fromDatabase({
+    required String department,
+    required String certification,
+    required int staffId
+  }) : _department = department,
+       _certification = certification,
+       super(
+        id: staffId,
+        firstName: '',
+        lastName: '',
+        dateOfBirth: DateTime.now(),
+        gender: '',
+        phone: '',
+        hireDate: DateTime.now(),
+        employmentStatus: '',
+        shift: '',
+        salary: 0.0,
+        staffType: StaffType.nurse
+       );
+
   @override
   void printDetails() {
     print('Staff ID: $_id');
@@ -191,6 +226,26 @@ class Security extends Staff {
   }) : _title = title,
        _assignedArea = assignedArea,
        super(staffType: StaffType.security);
+
+  Security.fromDatabase({
+    required String title,
+    required String assignedArea,
+    required int staffId,
+  }) : _title = title,
+       _assignedArea = assignedArea,
+       super(
+        id: staffId,
+        firstName: '',
+        lastName: '',
+        dateOfBirth: DateTime.now(),
+        gender: '',
+        phone: '',
+        hireDate: DateTime.now(),
+        employmentStatus: '',
+        shift: '',
+        salary: 0.0,
+        staffType: StaffType.security
+       );
   
   @override
   void printDetails() {
@@ -264,6 +319,7 @@ class Cleaner extends Staff {
 class Administrator extends Staff {
   final String _username;
   final String _password;
+  final String _department;
 
   Administrator({
     super.id,
@@ -284,14 +340,39 @@ class Administrator extends Staff {
     super.updatedAt,
     required String username,
     required String password,
+    required String department
   }) : _username = username,
        _password = password,
+       _department = department,
        super(staffType: StaffType.administrator);
+
+  Administrator.fromDatabase({
+    required int staffId,
+    required String username,
+    required String password,
+    required String department
+  }) : _username = username,
+       _password = password,
+       _department = department,
+       super(
+        id: staffId,
+        firstName: '',
+        lastName: '',
+        dateOfBirth: DateTime.now(),
+        gender: '',
+        phone: '',
+        hireDate: DateTime.now(),
+        employmentStatus: '',
+        shift: '',
+        salary: 0.0,
+        staffType: StaffType.administrator
+       );
 
   @override
   void printDetails() {
     print('Staff ID: $_id');
     print('Username: $_username');
-    print('Password $_password');
+    print('Password: $_password');
+    print('Department: $_department');
   }
 }

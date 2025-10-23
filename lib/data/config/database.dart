@@ -120,6 +120,7 @@ class DatabaseHelper {
           staff_id INTEGER NOT NULL,
           username TEXT NOT NULL,
           password TEXT NOT NULL,
+          department TEXT NOT NULL,
           FOREIGN KEY (staff_id) REFERENCES staff(id) ON DELETE CASCADE
         )
       ''');
