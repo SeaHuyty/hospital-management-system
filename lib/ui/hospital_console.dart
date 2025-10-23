@@ -2,27 +2,6 @@ import 'dart:io';
 import './staff_console.dart';
 
 class HospitalConsole {
-  void clearScreen() {
-    stdout.write('\x1B[2J\x1B[0;0H');
-  }
-
-  Future<void> loadingBar() async {
-    const int total = 50; // length of the bar
-    clearScreen();
-    print("\n\n\n\n\n");
-    for (int i = 0; i <= 100; i += 4) {
-      // Calculate progress
-      int filled = (i / 100 * total).round();
-      String bar = '█' * filled + '-' * (total - filled);
-
-      // Move cursor to beginning of line and rewrite the bar
-      stdout.write('\r\t\t\t\tLoading: $bar $i%');
-
-      await Future.delayed(const Duration(milliseconds: 100));
-    }
-    clearScreen();
-  }
-
   void start() {
     int? choice;
 
