@@ -70,8 +70,8 @@ class Staff {
     print('DOB: $_dateOfBirth');
     print('Gender: $_gender');
     print('Phone: $_phone');
-    (_email == null) ? {print('Email: Blank')} : {'Email: $_email'};
-    (_address == null) ? {print('Address: Blank')} : {print('Address: $_address')};
+    print(_email == null ? 'Email: Blank' : 'Email: $_email');
+    print(_address == null ? 'Address: Blank' : 'Address: $_address');
     (_emergencyContactName == null && _emergencyContactPhone == null) ?
       print('Emergency Contact: Blank') : print('Emergency Contact: $_emergencyContactName - $_emergencyContactPhone');
     print('Hire Date: $_hireDate');
