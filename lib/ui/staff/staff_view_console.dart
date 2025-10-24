@@ -14,7 +14,7 @@ void staffConsole() {
     option = int.tryParse(input ?? '');
     switch (option) {
       case 1:
-        print('View staff');
+        print('View All Staff');
         pauseMessage();
         break;
       case 2:
