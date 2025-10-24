@@ -1,56 +1,151 @@
-import 'package:hospital_management_system/domain/patient.dart';
+class Department {
+  final int? _id;
+  final String _name;
 
-enum RoomType { private, public }
-enum RoomCondition { fan, aircon }
+  Department({int? id, required String name}) : _id = id, _name = name;
 
-class Bed {
-  final int _bedNumber;
-  Patient? _patient;
+  int? get id => _id;
+  String get name => _name;
 
-  Bed(this._bedNumber);
-
-  int get bedNumber => _bedNumber;
-  bool get isAvailable => _patient == null;
-
-  void assignPatient(Patient patient) {
-    if (!isAvailable) throw StateError('Bed $bedNumber is already occupied.');
-    _patient = patient;
+  // Convert from database row (Map) to Department object
+  factory Department.fromMap(Map<String, dynamic> d) {
+    return Department(id: d['id'] as int?, name: d['name']);
   }
 
-  void vacate() {
-    _patient = null; // free the bed
+  // Convert Department to Map (for inserting/updating in DB)
+  Map<String, dynamic> toMap() {
+    return {'id': id, 'name': name};
   }
 }
 
+class RoomType {
+  final int? _id;
+  final String _name;
+  final double _price;
+  final String? _description;
+
+  RoomType({
+    int? id,
+    required String name,
+    required double price,
+    String? description,
+  }) : _id = id,
+       _name = name,
+       _price = price,
+       _description = description;
+
+  int? get id => _id;
+  String get name => _name;
+  double get price => _price;
+  String? get description => _description;
+
+  factory RoomType.fromMap(Map<String, dynamic> roomType) {
+    return RoomType(
+      id: roomType['id'] as int?,
+      name: roomType['name'],
+      price: roomType['price'] as double,
+      description: roomType['description'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {'id': id, 'name': name, 'price': price, 'description': description};
+  }
+}
+
+class Bed {
+  final int? _id;
+  final int? _roomId;
+  final bool _isOccupied;
+
+  Bed({int? id, int? roomId, required bool isOccupied})
+    : _id = id,
+      _roomId = roomId,
+      _isOccupied = isOccupied;
+
+  int? get id => _id;
+  int? get roomId => _roomId;
+  bool get isOccupied => _isOccupied;
+
+  factory Bed.fromMap(Map<String, dynamic> bed) {
+    return Bed(
+      id: bed['id'] as int?,
+      roomId: bed['room_id'],
+      isOccupied: bed['is_occupied'] == 1,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {'id': id, 'room_id': roomId, 'is_occupied': isOccupied ? 1 : 0};
+  }
+
+  // Future<bool> isRoomAvailable(Database db, Room room) async {
+  //   // Get the room type
+  //   final roomTypeResult = await db.query(
+  //     'room_types',
+  //     where: 'id = ?',
+  //     whereArgs: [room.roomTypeId],
+  //   );
+
+  //   if (roomTypeResult.isEmpty) return false;
+
+  //   final roomType = RoomType.fromMap(roomTypeResult.first);
+
+  //   // 🏠 For private/VIP rooms — check isOccupied flag
+  //   if (roomType.name.toLowerCase() == 'private' ||
+  //       roomType.name.toLowerCase() == 'vip') {
+  //     return !room.isOccupied;
+  //   }
+
+  //   // 🛏️ For shared/public rooms — check bed availability
+  //   final beds = await db.query(
+  //     'beds',
+  //     where: 'room_id = ? AND is_occupied = 0',
+  //     whereArgs: [room.id],
+  //   );
+
+  //   // Room is available if there's at least one free bed
+  //   return beds.isNotEmpty;
+  //}
+}
+
 class Room {
-  static int _counter = 0;
-  final int _roomNumber;
-  final RoomType _roomType;
-  final RoomCondition _roomCondition;
-  final List<Bed> _beds;
-  final double _pricePerDay;
+  final int? _roomNumber;
+  final int? _roomTypeId;
+  final int? _departmentId;
+  final bool _isOccupied;
 
-  Room(this._roomType, this._roomCondition) 
-    : _roomNumber = ++_counter,
-      _beds = List.generate(_roomType == RoomType.private ? 2 : 4, (i) => Bed(i + 1)),
-      _pricePerDay = (() {
-        if (_roomType == RoomType.public) return 20000.0;
-        if (_roomType == RoomType.private && _roomCondition == RoomCondition.fan) return 30000.0;
-        if (_roomType == RoomType.private && _roomCondition == RoomCondition.aircon) return 60000.0;
-        return 0.0;
-      }());
+  Room({
+    int? roomNumber,
+    int? roomTypeId,
+    int? departmentId,
+    required bool isOccupied,
+  }) : _roomNumber = roomNumber,
+       _roomTypeId = roomTypeId,
+       _departmentId = departmentId,
+       _isOccupied = isOccupied;
 
-  int get roomId => _roomNumber;
-  RoomType get roomType => _roomType;
-  RoomCondition get roomConditon => _roomCondition;
-  List<Bed> get beds => _beds;
-  double get pricePerDay => _pricePerDay;
+  int? get roomId => _roomNumber;
+  int? get roomTypeId => _roomTypeId;
+  int? get departmentId => _departmentId;
+  bool get isOccupied => _isOccupied;
 
-  bool get isAvailable => _beds.any((bed) => bed.isAvailable);
-  String get status => isAvailable ? "Available" : "Occupied";
+  factory Room.fromMap(Map<String, dynamic> room) {
+    return Room(
+      roomNumber: room['id'] as int?,
+      roomTypeId: room['room_type_id'] as int?,
+      departmentId: room['department_id'] as int?,
+      // SQLite uses 0/1 for booleans to convert manually
+      isOccupied: (room['is_occupied'] == 1),
+    );
+  }
 
-  @override
-  String toString() {
-    return 'Room ID: $roomId | Type: $roomType | Condition: $roomConditon | Price/Day: \$$pricePerDay | Status: $status';
+  Map<String, dynamic> toMap() {
+    return {
+      'id': roomId,
+      'room_type_id': roomTypeId,
+      'department_id': departmentId,
+      'is_occupied': isOccupied ? 1 : 0,
+    };
   }
 }
