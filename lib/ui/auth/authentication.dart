@@ -1,5 +1,6 @@
 import 'dart:io';
 import '../../domain/staff.dart';
 
-Administrator authentication() {
+Administrator? authentication() {
+  return null;
 }
