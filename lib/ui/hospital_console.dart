@@ -2,6 +2,7 @@ import 'dart:io';
 import './staff_console.dart';
 
 class HospitalConsole {
+  
   void start() {
     int? choice;
 

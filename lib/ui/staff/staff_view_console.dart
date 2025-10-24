@@ -1,13 +1,13 @@
 import 'dart:io';
-import './components/pause_message.dart';
+import './../components/pause_message.dart';
 
 void staffConsole() {
   int? option;
   do {
-    print("--- Staff Management ---");
-    print('1. View Staff');
-    print('2. Add new staff');
-    print('3. Edit staff');
+    print("--- View Staff ---");
+    print('1. View All Staff');
+    print('2. View All Based on Role');
+    print('3. Search Staff By ID');
     print('0. Back');
     stdout.write('=> Select an option: ');
     String? input = stdin.readLineSync();
