@@ -22,7 +22,7 @@ void staffConsole() {
         pauseMessage();
         break;
       case 3:
-        print('Edit staff');
+        print('Search Staff By ID');
         pauseMessage();
         break;
       default:
