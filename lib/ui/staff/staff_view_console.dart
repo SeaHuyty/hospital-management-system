@@ -18,7 +18,7 @@ void staffConsole() {
         pauseMessage();
         break;
       case 2:
-        print('Add new staff');
+        print('View All Based on Role');
         pauseMessage();
         break;
       case 3:
