@@ -1,11 +1,19 @@
 import 'dart:io';
+import 'package:hospital_management_system/domain/staff.dart';
+
 import './staff_console.dart';
+import './auth/authentication.dart';
 
 class HospitalConsole {
-  
-  void start() {
-    int? choice;
+  Future<void> start() async {
+    Administrator? administrator = await authentication();
 
+    if (administrator == null) {
+      print('Invalid Credential');
+      exit(0);
+    }
+
+    int? choice;
     do {
       print("\n\n\t\t\t\t=============================================\n");
       print("\t\t\t\t\tHOSPITAL MANAGEMENT SYSTEM\t\n");
