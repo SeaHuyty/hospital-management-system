@@ -16,17 +16,26 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    // Create databases directory if it doesn't exist
-    final dbDir = Directory('databases');
-    if (!await dbDir.exists()) {
-      await dbDir.create();
+    try {
+      // Create databases directory if it doesn't exist
+      final dbDir = Directory('databases');
+      if (!await dbDir.exists()) {
+        await dbDir.create();
+      }
+
+      String path = join(dbDir.path, 'hospital.db');
+
+      final db = sqlite3.open(path);
+
+      // Create tables after opening database
+      await createTablesIfNotExists(db);
+
+      print('Database initialized successfully at: $path');
+      return db;
+    } catch (error) {
+      print('Error initializing database: $error');
+      rethrow;
     }
-
-    String path = join(dbDir.path, 'hospital.db');
-
-    await createTablesIfNotExists();
-
-    return sqlite3.open(path);
   }
 
   Future<bool> connectToDatabase() async {
@@ -41,9 +50,7 @@ class DatabaseHelper {
     }
   }
 
-  Future<void> createTablesIfNotExists() async {
-    final db = await database;
-
+  Future<void> createTablesIfNotExists(Database db) async {
     try {
       // Base staff table
       db.execute('''
@@ -121,6 +128,8 @@ class DatabaseHelper {
           username TEXT NOT NULL,
           password TEXT NOT NULL,
           department TEXT NOT NULL,
+          is_locked INTEGER DEFAULT 0,
+          lastLogin TEXT,
           FOREIGN KEY (staff_id) REFERENCES staff(id) ON DELETE CASCADE
         )
       ''');
@@ -184,6 +193,37 @@ class DatabaseHelper {
       ''');
     } catch (error) {
       print('Error creating staff table: $error');
+    }
+  }
+
+  // Method to drop all tables for development and testing
+  Future<void> dropAllTables() async {
+    try {
+      final db = await database;
+
+      db.execute('DROP TABLE IF EXISTS logs');
+      db.execute('DROP TABLE IF EXISTS administrators');
+      db.execute('DROP TABLE IF EXISTS cleaners');
+      db.execute('DROP TABLE IF EXISTS security');
+      db.execute('DROP TABLE IF EXISTS nurses');
+      db.execute('DROP TABLE IF EXISTS doctors');
+      db.execute('DROP TABLE IF EXISTS staff');
+
+      print('All tables dropped successfully');
+    } catch (error) {
+      print('Error dropping tables: $error');
+    }
+  }
+
+  // Method to recreate all tables
+  Future<void> recreateTables() async {
+    try {
+      final db = await database;
+      await dropAllTables();
+      await createTablesIfNotExists(db);
+      print('Tables recreated successfully');
+    } catch (error) {
+      print('Error in recreating tables: $error');
     }
   }
 }

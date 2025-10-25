@@ -1,13 +1,5 @@
-import 'package:hospital_management_system/data/config/database.dart';
+import 'package:hospital_management_system/main.dart' as app;
 
-void main(List<String> arguments) async {
-  DatabaseHelper dbHelper = DatabaseHelper();
-
-  bool isConnected = await dbHelper.connectToDatabase();
-
-  if (isConnected) {
-    print('Database connected successfully');
-  } else {
-    print('Failed to connect to database.');
-  }
+Future<void> main(List<String> args) async {
+  await app.main();
 }

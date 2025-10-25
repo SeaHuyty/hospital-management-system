@@ -63,6 +63,8 @@ class Staff {
        _staffType = staffType,
        _createdAt = createdAt,
        _updatedAt = updatedAt;
+  
+  int? get id => _id;
 
   void printDetails() {
     print('Staff ID: $_id');
@@ -320,6 +322,8 @@ class Administrator extends Staff {
   final String _username;
   final String _password;
   final String _department;
+  final int _isLocked;
+  final String? _lastLogin;
 
   Administrator({
     super.id,
@@ -340,20 +344,27 @@ class Administrator extends Staff {
     super.updatedAt,
     required String username,
     required String password,
-    required String department
+    required String department,
+    String? lastLogin, 
   }) : _username = username,
        _password = password,
        _department = department,
+       _isLocked = 0,
+       _lastLogin = lastLogin,
        super(staffType: StaffType.administrator);
 
   Administrator.fromDatabase({
     required int staffId,
     required String username,
     required String password,
-    required String department
+    required String department,
+    required int isLocked,
+    String? lastLogin,
   }) : _username = username,
        _password = password,
        _department = department,
+       _isLocked = isLocked,
+       _lastLogin = lastLogin,
        super(
         id: staffId,
         firstName: '',
@@ -368,11 +379,16 @@ class Administrator extends Staff {
         staffType: StaffType.administrator
        );
 
+  int get isLocked => _isLocked;
+  String get password => _password;
+
   @override
   void printDetails() {
     print('Staff ID: $_id');
     print('Username: $_username');
     print('Password: $_password');
     print('Department: $_department');
+    print(_lastLogin == null || _lastLogin!.isEmpty ? 'Last Login: Never' : 'Last Login: $_lastLogin');
+    print(_isLocked == 0 ? 'Account Lock: False' : 'Account Lock: True');
   }
 }
