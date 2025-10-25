@@ -388,8 +388,7 @@ class Administrator extends Staff {
     print('Username: $_username');
     print('Password: $_password');
     print('Department: $_department');
-    print('Last Login: $_lastLogin');
-    print(_lastLogin!.isEmpty ? 'Last Login: Never' : 'Last Login: $_lastLogin');
+    print(_lastLogin == null || _lastLogin!.isEmpty ? 'Last Login: Never' : 'Last Login: $_lastLogin');
     print(_isLocked == 0 ? 'Account Lock: False' : 'Account Lock: True');
   }
 }
