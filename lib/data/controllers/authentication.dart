@@ -53,7 +53,7 @@ class AuthenticationController {
     return null;
   }
 
-  Future<void> _updateLastLogin(int? administratorId) async {
+  Future<void> _updateLastLogin(int administratorId) async {
     final db = await _dbHelper.database;
 
     db.execute('''
