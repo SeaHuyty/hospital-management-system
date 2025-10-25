@@ -16,38 +16,48 @@ class Address {
 }
 
 class Patient {
-  final String? _id;
+  final int? _id;
   final String _name;
   final int _age;
   final String _gender;
   final String _nationality;
   final Address _address;
+  final int _roomId;
 
   Patient({
-    String? id,
+    int? id,
     required String name,
     required int age,
     required String gender,
     required String nationality,
     required Address address,
+    required int roomId,
   }) : _id = id,
        _name = name,
        _age = age,
        _gender = gender,
        _nationality = nationality,
-       _address = address;
+       _address = address,
+       _roomId = roomId;
 
-  String? get id => _id;
+  int? get id => _id;
   String get name => _name;
   int get age => _age;
   String get gender => _gender;
   String get nationality => _nationality;
   Address get address => _address;
+  int get roomId => _roomId;
 
-  @override
-  String toString() {
-    return "Name: $name Age: $age Gender: $gender Nationality: $nationality\n"
-      "Address: $address";
+  // Convert Map to Object for retrieving from db
+  factory Patient.fromMap(Map<String, dynamic> p) {
+    return Patient(
+      id: p['id'],
+      name: p['name'],
+      age: p['age'],
+      gender: p['gender'],
+      nationality: p['nationality'],
+      address: p['address'],
+      roomId: p['room_id'],
+    );
   }
-
 }

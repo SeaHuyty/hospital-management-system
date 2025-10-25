@@ -142,6 +142,55 @@ class DatabaseHelper {
           time TEXT NOT NULL
         )
       ''');
+
+      db.execute('''
+        CREATE TABLE IF NOT EXISTS departments (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL
+        )
+      ''');
+
+      db.execute('''
+        CREATE TABLE IF NOT EXISTS room_types (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          price REAL NOT NULL,
+          description TEXT
+        )
+      ''');
+
+      db.execute('''
+        CREATE TABLE IF NOT EXISTS rooms (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          room_type_id INTEGER,
+          department_id INTEGER,
+          is_occupied INTEGER NOT NULL,
+          FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE,
+          FOREIGN KEY (room_type_id) REFERENCES room_types(id) ON DELETE CASCADE
+        )
+      ''');
+
+      db.execute('''
+          CREATE TABLE IF NOT EXISTS beds(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            room_id INTEGER NOT NULL,
+            is_occupied BOOLEAN NOT NULL,
+            FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE
+          )
+      ''');
+
+      db.execute('''
+        CREATE TABLE IF NOT EXISTS patients (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          age INTEGER NOT NULL,
+          gender TEXT NOT NULL,
+          nationality TEXT NOT NULL,
+          address TEXT NOT NULL,
+          room_id INTEGER NOT NULL,
+          FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE
+        )
+      ''');
     } catch (error) {
       print('Error creating staff table: $error');
     }
