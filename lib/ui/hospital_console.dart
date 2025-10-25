@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:hospital_management_system/domain/staff.dart';
+import 'package:hospital_management_system/ui/components/clear_screen.dart';
+import 'package:hospital_management_system/ui/patient_console.dart';
 
 import './staff_console.dart';
 import './auth/authentication.dart';
@@ -7,14 +9,16 @@ import './auth/authentication.dart';
 class HospitalConsole {
   Future<void> start() async {
     Administrator? administrator = await authentication();
+    PatientConsole patientConsole = PatientConsole();
 
-    if (administrator == null) {
-      print('Invalid Credential');
-      exit(0);
-    }
+    // if (administrator == null) {
+    //   print('Invalid Credential');
+    //   exit(0);
+    // }
 
     int? choice;
     do {
+      clearScreen();
       print("\n\n\t\t\t\t=============================================\n");
       print("\t\t\t\t\tHOSPITAL MANAGEMENT SYSTEM\t\n");
       print("\t\t\t\t\t1. Staff");
@@ -30,13 +34,12 @@ class HospitalConsole {
 
       switch (choice) {
         case 1:
+          clearScreen();
           staffConsole();
           break;
         case 2:
-          //
-          break;
-        case 0:
-          //
+          clearScreen();
+          patientConsole.start();
           break;
         default:
           print("\n\t\t\t\tInvalid choice! Please try again.");

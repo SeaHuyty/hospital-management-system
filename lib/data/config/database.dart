@@ -174,7 +174,7 @@ class DatabaseHelper {
           CREATE TABLE IF NOT EXISTS beds(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             room_id INTEGER NOT NULL,
-            is_occupied BOOLEAN NOT NULL,
+            is_occupied INTEGER NOT NULL,
             FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE
           )
       ''');
@@ -186,7 +186,9 @@ class DatabaseHelper {
           age INTEGER NOT NULL,
           gender TEXT NOT NULL,
           nationality TEXT NOT NULL,
-          address TEXT NOT NULL,
+          commune TEXT NOT NULL,
+          district TEXT NOT NULL,
+          city TEXT NOT NULL,
           room_id INTEGER NOT NULL,
           FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE
         )
