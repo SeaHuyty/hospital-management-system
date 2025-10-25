@@ -22,11 +22,11 @@ class AuthenticationController {
       final row = result.first;
 
       return Administrator.fromDatabase(
-        staffId: row['staff_id'], 
-        username: row['username'], 
-        password: row['password'], 
-        department: row['department'],
-        isLocked: row['is_locked']
+        staffId: row['staff_id'] is int ? row['staff_id'] as int : int.tryParse(row['staff_id']?.toString() ?? ''),
+        username: row['username']?.toString(),
+        password: row['password']?.toString(),
+        department: row['department']?.toString(),
+        isLocked: row['is_locked'] is int ? row['is_locked'] as int : int.tryParse(row['is_locked']?.toString() ?? ''),
       );
     } catch (error) {
       print('Error fetching administrator: $error');
