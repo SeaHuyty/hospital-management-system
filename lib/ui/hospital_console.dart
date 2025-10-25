@@ -6,12 +6,12 @@ import './auth/authentication.dart';
 
 class HospitalConsole {
   Future<void> start() async {
-    Administrator? administrator = await authentication();
+    // Administrator? administrator = await authentication();
 
-    if (administrator == null) {
-      print('Invalid Credential');
-      exit(0);
-    }
+    // if (administrator == null) {
+    //   print('Invalid Credential');
+    //   exit(0);
+    // }
 
     int? choice;
     do {

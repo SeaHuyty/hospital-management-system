@@ -1,12 +1,6 @@
 enum StaffType { doctor, nurse, security, cleaner, administrator }
-enum EmploymentStatus {
-  active('active'),
-  leave('leave'),
-  terminated('terminated');
 
-  const EmploymentStatus(this.status);
-  final String status;
-}
+enum EmploymentStatus { active, leave, terminated }
 
 // Base Staff class
 class Staff {
@@ -46,7 +40,18 @@ class Staff {
     required StaffType staffType,
     DateTime? createdAt,
     DateTime? updatedAt,
-  }) : _id = id,
+  }) : 
+       // Validation
+       assert(firstName.trim().isNotEmpty, 'Firstname cannot be empty'),
+       assert(lastName.trim().isNotEmpty, 'Lastname cannot be empty'),
+       assert(phone.trim().isNotEmpty, 'Phone cannot be empty'),
+       assert(salary > 0, 'Salary must be positive'),
+       assert(dateOfBirth.isBefore(DateTime.now()), 'Date of birth cannot be in the future'),
+       assert(hireDate.isBefore(DateTime.now().add(Duration(days: 1))), 'Hire date cannot be in the future'),
+       assert(shift.trim().isNotEmpty, 'Shift cannot be empty'),
+       assert(employmentStatus.trim().isNotEmpty, 'Employment cannot be empty'),
+       // Initialize fields
+       _id = id,
        _firstName = firstName,
        _lastName = lastName,
        _dateOfBirth = dateOfBirth,
@@ -63,8 +68,25 @@ class Staff {
        _staffType = staffType,
        _createdAt = createdAt,
        _updatedAt = updatedAt;
-  
+
+  // Getter methods
   int? get id => _id;
+  String get firstName => _firstName;
+  String get lastName => _lastName;
+  DateTime get dateOfBirth => _dateOfBirth;
+  String get gender => _gender;
+  String get phone => _phone;
+  String? get email => _email;
+  String? get address => _address;
+  String? get emergencyContactName => _emergencyContactName;
+  String? get emergencyContactPhone => _emergencyContactPhone;
+  DateTime get hireDate => _hireDate;
+  String get employmentStatus => _employmentStatus;
+  String get shift => _shift;
+  double get salary => _salary;
+  StaffType get staffType => _staffType;
+  DateTime? get createdAt => _createdAt;
+  DateTime? get updatedAt => _updatedAt;
 
   void printDetails() {
     print('Staff ID: $_id');
@@ -74,8 +96,11 @@ class Staff {
     print('Phone: $_phone');
     print(_email == null ? 'Email: Blank' : 'Email: $_email');
     print(_address == null ? 'Address: Blank' : 'Address: $_address');
-    (_emergencyContactName == null && _emergencyContactPhone == null) ?
-      print('Emergency Contact: Blank') : print('Emergency Contact: $_emergencyContactName - $_emergencyContactPhone');
+    (_emergencyContactName == null && _emergencyContactPhone == null)
+        ? print('Emergency Contact: Blank')
+        : print(
+            'Emergency Contact: $_emergencyContactName - $_emergencyContactPhone',
+          );
     print('Hire Date: $_hireDate');
     print('Employment Status: $_employmentStatus');
     print('Shift: $_shift');
@@ -110,33 +135,44 @@ class Doctor extends Staff {
     super.updatedAt,
     required String specialization,
     required String licenseNumber,
-    required String qualification
-  }) :  _specialization = specialization,
-        _licenseNumber = licenseNumber,
-        _qualification = qualification,
-        super(staffType: StaffType.doctor);
+    required String qualification,
+  }) : 
+       // Validation
+       assert(specialization.trim().isNotEmpty, 'Specialization cannot be empty'),
+       assert(licenseNumber.trim().isNotEmpty, 'License Number cannot be empty'),
+       assert(qualification.trim().isNotEmpty, 'Qualification cannot be empty'),
+       // Initialize fields
+       _specialization = specialization,
+       _licenseNumber = licenseNumber,
+       _qualification = qualification,
+       super(staffType: StaffType.doctor);
 
   Doctor.fromDatabase({
     required String specialization,
     required String licenseNumber,
     required String qualification,
-    required int staffId
+    required int staffId,
   }) : _specialization = specialization,
        _licenseNumber = licenseNumber,
        _qualification = qualification,
        super(
-        id: staffId,
-        firstName: '',
-        lastName: '',
-        dateOfBirth: DateTime.now(),
-        gender: '',
-        phone: '',
-        hireDate: DateTime.now(),
-        employmentStatus: '',
-        shift: '',
-        salary: 0.0,
-        staffType: StaffType.doctor
+         id: staffId,
+         firstName: '',
+         lastName: '',
+         dateOfBirth: DateTime.now(),
+         gender: '',
+         phone: '',
+         hireDate: DateTime.now(),
+         employmentStatus: '',
+         shift: '',
+         salary: 0.0,
+         staffType: StaffType.doctor,
        );
+
+  // Getter methods
+  String get specialization => _specialization;
+  String get licenseNumber => _licenseNumber;
+  String get qualification => _qualification;
 
   @override
   void printDetails() {
@@ -169,30 +205,38 @@ class Nurse extends Staff {
     super.createdAt,
     super.updatedAt,
     required String department,
-    required String certification
-  }) : _department = department,
+    required String certification,
+  }) : 
+       // Validation
+       assert(department.trim().isNotEmpty, 'Department cannot be empty'),
+       assert(certification.trim().isNotEmpty, 'Certification cannot be empty'),
+       _department = department,
        _certification = certification,
        super(staffType: StaffType.nurse);
 
   Nurse.fromDatabase({
     required String department,
     required String certification,
-    required int staffId
+    required int staffId,
   }) : _department = department,
        _certification = certification,
        super(
-        id: staffId,
-        firstName: '',
-        lastName: '',
-        dateOfBirth: DateTime.now(),
-        gender: '',
-        phone: '',
-        hireDate: DateTime.now(),
-        employmentStatus: '',
-        shift: '',
-        salary: 0.0,
-        staffType: StaffType.nurse
+         id: staffId,
+         firstName: '',
+         lastName: '',
+         dateOfBirth: DateTime.now(),
+         gender: '',
+         phone: '',
+         hireDate: DateTime.now(),
+         employmentStatus: '',
+         shift: '',
+         salary: 0.0,
+         staffType: StaffType.nurse,
        );
+
+  // Getter methods
+  String get department => _department;
+  String get certification => _certification;
 
   @override
   void printDetails() {
@@ -224,8 +268,12 @@ class Security extends Staff {
     super.createdAt,
     super.updatedAt,
     required String title,
-    required String assignedArea
-  }) : _title = title,
+    required String assignedArea,
+  }) : 
+       // Validation
+       assert(title.trim().isNotEmpty, 'Title cannot be empty'),
+       assert(assignedArea.trim().isNotEmpty, 'Assign Area cannot be empty'),
+       _title = title,
        _assignedArea = assignedArea,
        super(staffType: StaffType.security);
 
@@ -236,19 +284,23 @@ class Security extends Staff {
   }) : _title = title,
        _assignedArea = assignedArea,
        super(
-        id: staffId,
-        firstName: '',
-        lastName: '',
-        dateOfBirth: DateTime.now(),
-        gender: '',
-        phone: '',
-        hireDate: DateTime.now(),
-        employmentStatus: '',
-        shift: '',
-        salary: 0.0,
-        staffType: StaffType.security
+         id: staffId,
+         firstName: '',
+         lastName: '',
+         dateOfBirth: DateTime.now(),
+         gender: '',
+         phone: '',
+         hireDate: DateTime.now(),
+         employmentStatus: '',
+         shift: '',
+         salary: 0.0,
+         staffType: StaffType.security,
        );
-  
+
+  // Getter methods
+  String get title => _title;
+  String get assignedArea => _assignedArea;
+
   @override
   void printDetails() {
     print('Staff ID: $_id');
@@ -281,8 +333,14 @@ class Cleaner extends Staff {
     super.updatedAt,
     required String title,
     required String assignedDepartment,
-    required String assignedArea
-  }) : _title = title,
+    required String assignedArea,
+  }) : 
+       // Validation
+       assert(title.trim().isNotEmpty, 'Title cannot be empty'),
+       assert(assignedArea.trim().isNotEmpty, 'Assign Area cannot be empty'),
+       assert(assignedDepartment.trim().isNotEmpty, 'Assign Department cannot be empty'),
+       // Initialize fields
+       _title = title,
        _assignedArea = assignedArea,
        _assignedDepartment = assignedDepartment,
        super(staffType: StaffType.cleaner);
@@ -296,18 +354,23 @@ class Cleaner extends Staff {
        _assignedArea = assignedArea,
        _assignedDepartment = assignedDepartment,
        super(
-        id: staffId,
-        firstName: '',
-        lastName: '',
-        dateOfBirth: DateTime.now(),
-        gender: '',
-        phone: '',
-        hireDate: DateTime.now(),
-        employmentStatus: '',
-        shift: '',
-        salary: 0.0,
-        staffType: StaffType.cleaner
+         id: staffId,
+         firstName: '',
+         lastName: '',
+         dateOfBirth: DateTime.now(),
+         gender: '',
+         phone: '',
+         hireDate: DateTime.now(),
+         employmentStatus: '',
+         shift: '',
+         salary: 0.0,
+         staffType: StaffType.cleaner,
        );
+
+  // Getter methods
+  String get title => _title;
+  String get assignedArea => _assignedArea;
+  String get assignedDepartment => _assignedDepartment;
 
   @override
   void printDetails() {
@@ -345,12 +408,16 @@ class Administrator extends Staff {
     required String username,
     required String password,
     required String department,
-    String? lastLogin, 
-  }) : _username = username,
+  }) : 
+       // Validation
+       assert(username.trim().isNotEmpty, 'Username cannot be empty'),
+       assert(password.trim().isNotEmpty, 'Password cannot be empty'),
+       assert(department.trim().isNotEmpty, 'Department cannot be empty'),
+       _username = username,
        _password = password,
        _department = department,
        _isLocked = 0,
-       _lastLogin = lastLogin,
+       _lastLogin = 'Never',
        super(staffType: StaffType.administrator);
 
   Administrator.fromDatabase({
@@ -366,21 +433,25 @@ class Administrator extends Staff {
        _isLocked = isLocked,
        _lastLogin = lastLogin,
        super(
-        id: staffId,
-        firstName: '',
-        lastName: '',
-        dateOfBirth: DateTime.now(),
-        gender: '',
-        phone: '',
-        hireDate: DateTime.now(),
-        employmentStatus: '',
-        shift: '',
-        salary: 0.0,
-        staffType: StaffType.administrator
+         id: staffId,
+         firstName: '',
+         lastName: '',
+         dateOfBirth: DateTime.now(),
+         gender: '',
+         phone: '',
+         hireDate: DateTime.now(),
+         employmentStatus: '',
+         shift: '',
+         salary: 0.0,
+         staffType: StaffType.administrator,
        );
 
+  // Getter methods
+  String get username => _username;
   int get isLocked => _isLocked;
   String get password => _password;
+  String get department => _department;
+  String? get lastLogin => _lastLogin;
 
   @override
   void printDetails() {
@@ -388,7 +459,7 @@ class Administrator extends Staff {
     print('Username: $_username');
     print('Password: $_password');
     print('Department: $_department');
-    print(_lastLogin == null || _lastLogin!.isEmpty ? 'Last Login: Never' : 'Last Login: $_lastLogin');
+    print('Last Login: $_lastLogin');
     print(_isLocked == 0 ? 'Account Lock: False' : 'Account Lock: True');
   }
 }
