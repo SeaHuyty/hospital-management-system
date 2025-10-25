@@ -21,7 +21,9 @@ class Patient {
   final int _age;
   final String _gender;
   final String _nationality;
-  final Address _address;
+  final String _commune;
+  final String _district;
+  final String _city;
   final int _roomId;
 
   Patient({
@@ -30,14 +32,18 @@ class Patient {
     required int age,
     required String gender,
     required String nationality,
-    required Address address,
+    required String commune,
+    required String district,
+    required String city,
     required int roomId,
   }) : _id = id,
        _name = name,
        _age = age,
        _gender = gender,
        _nationality = nationality,
-       _address = address,
+       _commune = commune,
+       _district = district,
+       _city = city,
        _roomId = roomId;
 
   int? get id => _id;
@@ -45,7 +51,9 @@ class Patient {
   int get age => _age;
   String get gender => _gender;
   String get nationality => _nationality;
-  Address get address => _address;
+  String get commune => _commune;
+  String get district => _district;
+  String get city => _city;
   int get roomId => _roomId;
 
   // Convert Map to Object for retrieving from db
@@ -56,7 +64,9 @@ class Patient {
       age: p['age'],
       gender: p['gender'],
       nationality: p['nationality'],
-      address: p['address'],
+      commune: p['commune'],
+      district: p['district'],
+      city: p['city'],
       roomId: p['room_id'],
     );
   }
