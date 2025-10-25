@@ -174,7 +174,7 @@ class DatabaseHelper {
         CREATE TABLE IF NOT EXISTS patients (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT NOT NULL,
-          age TEXT NOT NULL,
+          age INTEGER NOT NULL,
           gender TEXT NOT NULL,
           nationality TEXT NOT NULL,
           address TEXT NOT NULL,
