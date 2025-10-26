@@ -3,12 +3,12 @@ import 'package:hospital_management_system/domain/staff.dart';
 import 'package:hospital_management_system/ui/components/clear_screen.dart';
 import 'package:hospital_management_system/ui/patient_console.dart';
 
-import './staff_console.dart';
-import './auth/authentication.dart';
+import 'package:hospital_management_system/ui/staff_console.dart';
+import 'package:hospital_management_system/ui/auth/authentication.dart';
 
 class HospitalConsole {
   Future<void> start() async {
-    Administrator? administrator = await authentication();
+    // Administrator? administrator = await authentication();
     PatientConsole patientConsole = PatientConsole();
 
     // if (administrator == null) {
@@ -34,11 +34,9 @@ class HospitalConsole {
 
       switch (choice) {
         case 1:
-          clearScreen();
-          staffConsole();
+          await staffConsole();
           break;
         case 2:
-          clearScreen();
           patientConsole.start();
           break;
         default:
