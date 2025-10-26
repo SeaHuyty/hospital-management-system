@@ -39,6 +39,8 @@ class HospitalConsole {
         case 2:
           patientConsole.start();
           break;
+        case 0:
+          break;
         default:
           print("\n\t\t\t\tInvalid choice! Please try again.");
           continue;
