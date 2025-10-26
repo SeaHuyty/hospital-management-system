@@ -1,11 +1,13 @@
 import 'package:hospital_management_system/ui/components/loading_bar.dart';
 import 'package:hospital_management_system/ui/hospital_console.dart';
 import 'package:hospital_management_system/data/config/database.dart';
+import 'package:hospital_management_system/data/seeders/seeder.dart';
 
 Future<void> main() async {
   try {
     // Uncomment this line to recreate tables during development
     await _recreateTablesForDevelopment();
+    await seedAllStaff();
 
     HospitalConsole console = HospitalConsole();
     DatabaseHelper database = DatabaseHelper();
