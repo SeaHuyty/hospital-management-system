@@ -1,7 +1,7 @@
 import 'dart:io';
 import './../components/pause_message.dart';
 
-void staffConsole() {
+Future<void> staffConsole() async {
   int? option;
   do {
     print("--- View Staff ---");
@@ -15,19 +15,19 @@ void staffConsole() {
     switch (option) {
       case 1:
         print('View All Staff');
-        pauseMessage();
+        pressEnterToContinue();
         break;
       case 2:
         print('View All Based on Role');
-        pauseMessage();
+        pressEnterToContinue();
         break;
       case 3:
         print('Search Staff By ID');
-        pauseMessage();
+        pressEnterToContinue();
         break;
       default:
         print('Please enter a valid option');
-        pauseMessage();
+        pressEnterToContinue();
         break;
     }
   } while (option != 0);

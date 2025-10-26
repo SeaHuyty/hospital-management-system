@@ -23,7 +23,6 @@ Future<void> main() async {
     print('Database connected successfully!');
     await loadingBar();
 
-    print('Starting console...');
     await console.start();
   } catch (error) {
     print('Error in main: $error');
