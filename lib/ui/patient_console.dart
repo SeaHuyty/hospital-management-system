@@ -90,7 +90,7 @@ class PatientConsole {
       roomId: roomId,
     );
 
-    // Insert into DB
+    // Insert into DB (don't await here; insertPatient may be synchronous)
     _patientController.insertPatient(patient);
     print('Patient inserted successfully!\n');
 

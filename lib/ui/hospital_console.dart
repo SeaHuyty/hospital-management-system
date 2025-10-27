@@ -42,7 +42,7 @@ class HospitalConsole {
           break;
         default:
           print("\n\t\t\t\tInvalid choice! Please try again.");
-          continue;
+          break;
       }
     } while (choice != 0);
   }
