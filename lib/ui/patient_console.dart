@@ -40,7 +40,7 @@ class PatientConsole {
     pressEnterToContinue();
   }
 
-  void allocateBed() {
+  void allocateBed() async {
     stdout.write("\t\t\t\tEnter patient name: ");
     String name = stdin.readLineSync() ?? '';
     stdout.write("\t\t\t\tEnter age: ");
@@ -59,6 +59,25 @@ class PatientConsole {
     stdout.write('\t\t\t\tEnter room ID: ');
     int roomId = int.tryParse(stdin.readLineSync() ?? '') ?? 1;
 
+    print("\n\t\t\t\tChoose room type:");
+    print("\t\t\t\t1. Shared Room");
+    print("\t\t\t\t2. Private Room");
+    print("\t\t\t\t3. VIP Room");
+    stdout.write("\t\t\t\tEnter your choice: ");
+    int choice = int.tryParse(stdin.readLineSync() ?? '') ?? 1;
+
+    String roomTypeName;
+    switch (choice) {
+      case 2:
+        roomTypeName = 'Private';
+        break;
+      case 3:
+        roomTypeName = 'VIP';
+        break;
+      default:
+        roomTypeName = 'Shared';
+    }
+
     // Create Patient Object
     Patient patient = Patient(
       name: name,
@@ -74,6 +93,17 @@ class PatientConsole {
     // Insert into DB
     _patientController.insertPatient(patient);
     print('Patient inserted successfully!\n');
+
+    final success = await _patientController.allocateBedToPatient(
+      patient,
+      roomTypeName,
+    );
+
+    if (success) {
+      print("\t\t\t\tBed allocated successfully!");
+    } else {
+      print("\t\t\t\tNo available room/bed found for this room type.");
+    }
   }
 
   Future<void> start() async {
