@@ -37,13 +37,13 @@ class HospitalConsole {
           await staffConsole();
           break;
         case 2:
-          patientConsole.start();
+          await patientConsole.start();
           break;
         case 0:
           break;
         default:
           print("\n\t\t\t\tInvalid choice! Please try again.");
-          continue;
+          break;
       }
     } while (choice != 0);
   }

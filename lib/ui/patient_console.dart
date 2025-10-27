@@ -5,7 +5,7 @@ import 'package:hospital_management_system/domain/patient.dart';
 class PatientConsole {
   final PatientController _patientController = PatientController();
 
-  void start() async {
+  Future<void> start() async {
     stdout.write("\t\t\t\tEnter patient name: ");
     String name = stdin.readLineSync() ?? '';
     stdout.write("\t\t\t\tEnter age: ");
@@ -26,17 +26,17 @@ class PatientConsole {
 
     // Create Patient Object
     Patient patient = Patient(
-      name: name, 
-      age: age, 
-      gender: gender, 
-      nationality: nationality, 
+      name: name,
+      age: age,
+      gender: gender,
+      nationality: nationality,
       commune: commune,
       district: district,
       city: city,
-      roomId: roomId
+      roomId: roomId,
     );
 
-    // Insert into DB
+    // Insert into DB (don't await here; insertPatient may be synchronous)
     _patientController.insertPatient(patient);
     print('Patient inserted successfully!\n');
 
