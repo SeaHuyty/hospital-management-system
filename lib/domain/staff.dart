@@ -69,6 +69,35 @@ class Staff {
        _createdAt = createdAt,
        _updatedAt = updatedAt;
 
+  factory Staff.fromMap(Map<String, dynamic> map) {
+    // Helper to parse dates stored as ISO strings
+    DateTime parseDate(dynamic date) {
+      if (date == null) throw FormatException('Missing date field');
+      return DateTime.parse(date as String);
+    }
+
+    return Staff(
+      id: map['id'] as int?,
+      firstName: map['first_name'] as String,
+      lastName: map['last_name'] as String,
+      dateOfBirth: parseDate(map['date_of_birth']),
+      gender: map['gender'] as String,
+      phone: map['phone'] as String,
+      email: map['email'] as String?,
+      address: map['address'] as String?,
+      emergencyContactName: map['emergency_contact_name'] as String?,
+      emergencyContactPhone: map['emergency_contact_phone'] as String?,
+      hireDate: parseDate(map['hire_date']),
+      employmentStatus: map['employment_status'] as String,
+      shift: map['shift'] as String,
+      salary: map['salary'] as double,
+      staffType: StaffType.values.firstWhere(
+          (e) => e.toString().split('.').last == map['staff_type']),
+      createdAt: parseDate(map['created_at']),
+      updatedAt: parseDate(map['updated_at']),
+    );
+  }
+
   // Getter methods
   int? get id => _id;
   String get firstName => _firstName;
