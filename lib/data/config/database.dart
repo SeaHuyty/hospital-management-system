@@ -190,6 +190,8 @@ class DatabaseHelper {
           district TEXT NOT NULL,
           city TEXT NOT NULL,
           room_id INTEGER NOT NULL,
+          bed_id INTEGER NOT NULL,
+          FOREIGN KEY (bed_id) REFERENCES beds(id) ON DELETE CASCADE
           FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE
         )
       ''');
