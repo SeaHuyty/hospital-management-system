@@ -7,13 +7,13 @@ import 'package:hospital_management_system/ui/auth/authentication.dart';
 
 class HospitalConsole {
   Future<void> start() async {
-    // Administrator? administrator = await authentication();
+    Administrator? administrator = await authentication();
     PatientConsole patientConsole = PatientConsole();
 
-    // if (administrator == null) {
-    //   print('Invalid Credential');
-    //   exit(0);
-    // }
+    if (administrator == null) {
+      print('Invalid Credential');
+      exit(0);
+    }
 
     int? choice;
     do {

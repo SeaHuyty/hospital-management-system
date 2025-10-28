@@ -1,6 +1,7 @@
-import 'package:hospital_management_system/data/controllers/staff.dart';
+import 'package:hospital_management_system/data/controllers/staff/staff.dart';
 import 'package:hospital_management_system/domain/staff.dart';
 import 'package:hospital_management_system/ui/components/clear_screen.dart';
+import 'package:hospital_management_system/ui/components/table_printer.dart';
 
 Future<void> viewAllStaffs() async {
   try {
@@ -18,22 +19,39 @@ Future<void> viewAllStaffs() async {
     if (staff.isEmpty) {
       print('No staff found in the database.');
     } else {
-      print('Found ${staff.length} staff member(s):');
-      for (int i = 0; i < staff.length; i++) {
-        Staff member = staff[i];
-        print('\n--- Staff Member ${i + 1} ---');
-        print('ID: ${member.id}');
-        print('Name: ${member.firstName} ${member.lastName}');
-        print('Date of Birth: ${member.dateOfBirth}');
-        print('Gender: ${member.gender}');
-        print('Phone: ${member.phone}');
-        print('Salary: \$${member.salary}');
-        print('Status: ${member.employmentStatus}');
-        print('Shift: ${member.shift}');
-        print('Staff Type: ${member.staffType}');
-        print('Created At: ${member.createdAt}');
-        print('Updated At: ${member.updatedAt}');
-      }
+      print('Found ${staff.length} staff member(s):\n');
+
+      // Prepare table data
+      List<String> headers = [
+        'ID',
+        'Name',
+        'DOB',
+        'Gender',
+        'Phone',
+        'Email',
+        'Status',
+        'Shift',
+        'Salary',
+        'Staff Type',
+      ];
+
+      List<List<String>> rows = staff.map((member) {
+        return [
+          member.id?.toString() ?? 'N/A',
+          '${member.firstName} ${member.lastName}',
+          member.dateOfBirth.toString().split(' ')[0], // Just the date part
+          member.gender,
+          member.phone,
+          member.email ?? 'N/A',
+          member.employmentStatus,
+          member.shift,
+          '\$${member.salary}',
+          member.staffType.toString().split('.').last, // Remove enum prefix
+        ];
+      }).toList();
+
+      // Print the table
+      printTable(headers: headers, rows: rows, tabs: 1);
     }
   } catch (error) {
     print('Error retrieving staff: $error');

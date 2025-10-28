@@ -27,7 +27,7 @@ Future<void> staffConsole() async {
         break;
 
       case 2:
-        print('Add New Staff functionality coming soon...');
+        print('View All Staff Based on Role functionality coming soon...');
         pressEnterToContinue();
         break;
 
