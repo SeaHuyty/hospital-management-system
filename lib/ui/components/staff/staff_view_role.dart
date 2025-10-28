@@ -1,4 +1,4 @@
-import 'package:hospital_management_system/data/controllers/doctor.dart';
+import 'package:hospital_management_system/data/controllers/staff/doctor.dart';
 import 'package:hospital_management_system/domain/staff.dart';
 import 'package:hospital_management_system/ui/components/clear_screen.dart';
 import 'package:hospital_management_system/ui/components/pause_message.dart';

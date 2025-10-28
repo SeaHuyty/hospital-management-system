@@ -59,42 +59,14 @@ class StaffControllers {
   }
 
   Future<List<Staff>> getAllStaff() async {
-    // List<Staff> staffs = [];
     try {
       final db = await DatabaseHelper().database;
       final result = db.select('SELECT * FROM staff;');
 
       return result.map((row) => Staff.fromMap(row)).toList();
-      
-      // for (final row in result) {
-      //   Staff staff = Staff(
-      //     id: row['id'],
-      //     firstName: row['first_name'],
-      //     lastName: row['last_name'],
-      //     dateOfBirth: DateTime.parse(row['date_of_birth']),
-      //     gender: row['gender'],
-      //     phone: row['phone'],
-      //     email: row['email'],
-      //     address: row['address'],
-      //     emergencyContactName: row['emergency_contact_name'],
-      //     emergencyContactPhone: row['emergency_contact_phone'],
-      //     hireDate: DateTime.parse(row['hire_date']),
-      //     employmentStatus: row['employment_status'],
-      //     shift: row['shift'],
-      //     salary: row['salary'],
-      //     staffType: StaffType.values.firstWhere(
-      //         (e) => e.toString().split('.').last == row['staff_type']),
-      //     createdAt: DateTime.parse(row['created_at']),
-      //     updatedAt: DateTime.parse(row['updated_at']),
-      //   );
-
-      //   staffs.add(staff);
-      // }
     } catch (error) {
       print('Error fetching staff: $error');
       return [];
     }
-
-    // return staffs;
   }
 }

@@ -129,7 +129,7 @@ class DatabaseHelper {
           password TEXT NOT NULL,
           department TEXT NOT NULL,
           is_locked INTEGER DEFAULT 0,
-          lastLogin TEXT,
+          last_login TEXT,
           FOREIGN KEY (staff_id) REFERENCES staff(id) ON DELETE CASCADE
         )
       ''');
