@@ -144,13 +144,4 @@ class Room {
       isOccupied: (room['is_occupied'] == 1),
     );
   }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': roomId,
-      'room_type_id': roomTypeId,
-      'department_id': departmentId,
-      'is_occupied': isOccupied ? 1 : 0,
-    };
-  }
 }
