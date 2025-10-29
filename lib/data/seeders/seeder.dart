@@ -1,3 +1,8 @@
+import 'package:hospital_management_system/data/seeders/seed_beds.dart';
+import 'package:hospital_management_system/data/seeders/seed_departments.dart';
+import 'package:hospital_management_system/data/seeders/seed_room_type.dart';
+import 'package:hospital_management_system/data/seeders/seed_rooms.dart';
+
 import 'seed_doctors.dart';
 import 'seed_nurses.dart';
 import 'seed_security.dart';
@@ -23,7 +28,19 @@ Future<void> seedAllStaff() async {
     print('Seeding administrators...');
     await seedAdministrators();
 
-    print('\n🎉 All staff seeded successfully!');
+    print('Seeding departments...');
+    await seedDepartments();
+
+    print('Seeding rooms...');
+    await seedRooms();
+
+    print('Seeding roomType...');
+    await seedRoomTypes();
+
+    print('Seeding beds...');
+    await seedBeds();
+
+    print('\nAll staff seeded successfully!');
     print('Summary:');
     print('- 6 Doctors');
     print('- 4 Nurses');

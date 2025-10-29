@@ -9,8 +9,8 @@ class PatientController {
     try {
       final db = await _dbHelper.database;
       db.execute('''
-        INSERT INTO patients (name, age, gender, nationality, commune, district, city, room_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO patients (name, age, gender, nationality, commune, district, city, room_id, bed_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       ''', [
         patient.name,
         patient.age,
@@ -20,6 +20,7 @@ class PatientController {
         patient.district,
         patient.city,
         patient.roomId,
+        patient.bedId,
       ]);
 
       final result = db.select('SELECT last_insert_rowid() as id;');
@@ -99,10 +100,10 @@ class PatientController {
             UPDATE patients SET room_id = ?, bed_id = ? WHERE id = ?;
           ''', [roomId, bed.id, patient.id]);
 
-          print('\nPatient "${patient.name}" assigned to:');
-          print('\tRoom Type: ${roomType.name}');
-          print('\tRoom ID: $roomId');
-          print('\tBed ID: ${bed.id}\n');
+          print('\n\t\t\t\tPatient "${patient.name}" assigned to:');
+          print('\t\t\t\tRoom Type: ${roomType.name}');
+          print('\t\t\t\tRoom ID: $roomId');
+          print('\t\t\t\tBed ID: ${bed.id}\n');
 
           // Optional: check if all beds are full to mark room as occupied
           final remainingBeds = db.select(

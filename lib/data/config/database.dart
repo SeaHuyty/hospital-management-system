@@ -163,6 +163,7 @@ class DatabaseHelper {
         CREATE TABLE IF NOT EXISTS rooms (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           room_type_id INTEGER,
+          capacity INTEGER NOT NULL,
           department_id INTEGER,
           is_occupied INTEGER NOT NULL,
           FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE,
@@ -190,7 +191,7 @@ class DatabaseHelper {
           district TEXT NOT NULL,
           city TEXT NOT NULL,
           room_id INTEGER NOT NULL,
-          bed_id INTEGER NOT NULL,
+          bed_id INTEGER,
           FOREIGN KEY (bed_id) REFERENCES beds(id) ON DELETE CASCADE
           FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE
         )
@@ -212,6 +213,11 @@ class DatabaseHelper {
       db.execute('DROP TABLE IF EXISTS nurses');
       db.execute('DROP TABLE IF EXISTS doctors');
       db.execute('DROP TABLE IF EXISTS staff');
+      db.execute('DROP TABLE IF EXISTS departments');
+      db.execute('DROP TABLE IF EXISTS room_types');
+      db.execute('DROP TABLE IF EXISTS rooms');
+      db.execute('DROP TABLE IF EXISTS beds');
+      db.execute('DROP TABLE IF EXISTS patients');
 
       print('All tables dropped successfully');
     } catch (error) {
