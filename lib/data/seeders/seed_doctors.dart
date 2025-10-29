@@ -6,12 +6,12 @@ Future<void> seedDoctors() async {
 
   // Doctor 1 - Cardiologist
   Doctor doctor1 = Doctor(
-    firstName: 'Sea',
-    lastName: 'Huyty',
+    firstName: 'Sok',
+    lastName: 'Bunkoing',
     dateOfBirth: DateTime(1980, 5, 15),
     gender: 'Male',
     phone: '+855123456789',
-    email: 'sea.huyty@hospital.com',
+    email: 'sok.bunkoing@hospital.com',
     hireDate: DateTime(2020, 1, 15),
     employmentStatus: 'active',
     shift: 'Morning',

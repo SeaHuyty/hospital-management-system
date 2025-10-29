@@ -69,4 +69,18 @@ class StaffControllers {
       return [];
     }
   }
+
+  Future<Staff?> searchStaffById(String id) async {
+    try {
+      final db = await DatabaseHelper().database;
+      final result = db.select(
+        'SELECT * FROM staff WHERE id = ?;',
+        [id],
+      );
+      return Staff.fromMap(result.first);
+    } catch (error) {
+      print('Error fetching staff with id $id: $error');
+      return null;
+    }
+  }
 }

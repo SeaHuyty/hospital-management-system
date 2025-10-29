@@ -41,7 +41,7 @@ class SecurityControllers {
         FROM 
           staff s
         JOIN 
-          security_staff ss ON s.id = ss.staff_id
+          security ss ON s.id = ss.staff_id
       ''');
 
       return result.map((row) => Security.fromMap(row)).toList();

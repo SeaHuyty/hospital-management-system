@@ -8,19 +8,10 @@ Future<void> seedAllStaff() async {
   try {
     print('Starting to seed all staff...\n');
 
-    print('Seeding doctors...');
     await seedDoctors();
-
-    print('Seeding nurses...');
     await seedNurses();
-
-    print('Seeding security staff...');
     await seedSecurityStaff();
-
-    print('Seeding cleaners...');
     await seedCleaners();
-
-    print('Seeding administrators...');
     await seedAdministrators();
 
     print('\n🎉 All staff seeded successfully!');
