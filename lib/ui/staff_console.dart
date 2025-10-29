@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:hospital_management_system/ui/components/clear_screen.dart';
 import 'package:hospital_management_system/ui/components/pause_message.dart';
 import 'package:hospital_management_system/ui/components/staff/view_all_staff.dart';
+import 'package:hospital_management_system/ui/components/staff/staff_view_role.dart';
+import 'package:hospital_management_system/ui/components/staff/search_staff.dart';
 
 Future<void> staffConsole() async {
   int? option;
@@ -27,13 +29,11 @@ Future<void> staffConsole() async {
         break;
 
       case 2:
-        print('View All Staff Based on Role functionality coming soon...');
-        pressEnterToContinue();
+        await staffViewByRole();
         break;
 
       case 3:
-        print('Edit Staff functionality coming soon...');
-        pressEnterToContinue();
+        await searchStaffByIdWithMenu();
         break;
 
       case 4:
