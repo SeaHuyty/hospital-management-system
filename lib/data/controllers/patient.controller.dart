@@ -160,7 +160,7 @@ class PatientController {
         print('\t\t\t\tRoom Type: ${roomType.name}');
         print('\t\t\t\tRoom ID: $roomId\n');
 
-        return true; 
+        return true;
       }
     } catch (error) {
       print("Error: $error");

@@ -48,7 +48,8 @@ class PatientConsole {
 
   Future<void> allocateBed() async {
     clearScreen();
-    stdout.write("\t\t\t\tEnter patient name: ");
+    print("\n\t\t\t\tInput patient information");
+    stdout.write("\n\t\t\t\tEnter patient name: ");
     String name = stdin.readLineSync() ?? '';
     stdout.write("\t\t\t\tEnter age: ");
     int age = int.tryParse(stdin.readLineSync() ?? '') ?? 1;
@@ -156,9 +157,6 @@ class PatientConsole {
       roomId: roomId,
     );
 
-    await _patientController.insertPatient(patient);
-    //print('\n\t\t\t\tPatient inserted successfully!\n');
-
     final success = await _patientController.allocateBedToPatient(
       patient,
       roomTypeName,
@@ -167,10 +165,10 @@ class PatientConsole {
     );
 
     if (success) {
+      await _patientController.insertPatient(patient);
       print("\t\t\t\tBed allocated successfully!");
       pressEnterToContinue();
     } else {
-      //print("\t\t\t\tNo available room/bed found for this room type.");
       pressEnterToContinue();
     }
   }
@@ -200,7 +198,7 @@ class PatientConsole {
           break;
         case 0:
           _hospitalConsole.start();
-          break;
+          return;
         default:
           print("Invalid choice, Please try again");
           continue;
