@@ -73,14 +73,71 @@ class StaffControllers {
   Future<Staff?> searchStaffById(String id) async {
     try {
       final db = await DatabaseHelper().database;
-      final result = db.select(
-        'SELECT * FROM staff WHERE id = ?;',
-        [id],
-      );
+      final result = db.select('SELECT * FROM staff WHERE id = ?;', [id]);
       return Staff.fromMap(result.first);
     } catch (error) {
       print('Error fetching staff with id $id: $error');
       return null;
+    }
+  }
+
+  Future<bool> updateStaffField(
+    String staffId,
+    String fieldName,
+    String newValue,
+  ) async {
+    try {
+      final db = await DatabaseHelper().database;
+      final now = DateTime.now().toIso8601String();
+
+      // Map field names to database column names
+      String columnName;
+      switch (fieldName) {
+        case 'firstName':
+          columnName = 'first_name';
+          break;
+        case 'lastName':
+          columnName = 'last_name';
+          break;
+        case 'phone':
+          columnName = 'phone';
+          break;
+        case 'email':
+          columnName = 'email';
+          break;
+        case 'address':
+          columnName = 'address';
+          break;
+        case 'emergencyContactName':
+          columnName = 'emergency_contact_name';
+          break;
+        case 'emergencyContactPhone':
+          columnName = 'emergency_contact_phone';
+          break;
+        case 'employmentStatus':
+          columnName = 'employment_status';
+          break;
+        case 'shift':
+          columnName = 'shift';
+          break;
+        case 'salary':
+          columnName = 'salary';
+          break;
+        default:
+          print('Error: Unknown field name $fieldName');
+          return false;
+      }
+
+      db.execute(
+        'UPDATE staff SET $columnName = ?, updated_at = ? WHERE id = ?',
+        [newValue, now, staffId],
+      );
+
+      print('Staff field updated successfully');
+      return true;
+    } catch (error) {
+      print('Error updating staff field: $error');
+      return false;
     }
   }
 }

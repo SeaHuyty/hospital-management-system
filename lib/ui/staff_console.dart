@@ -4,6 +4,8 @@ import 'package:hospital_management_system/ui/components/pause_message.dart';
 import 'package:hospital_management_system/ui/components/staff/view_all_staff.dart';
 import 'package:hospital_management_system/ui/components/staff/staff_view_role.dart';
 import 'package:hospital_management_system/ui/components/staff/search_staff.dart';
+import 'package:hospital_management_system/ui/components/staff/add_staff.dart';
+import 'package:hospital_management_system/ui/components/staff/update_staff.dart';
 
 Future<void> staffConsole() async {
   int? option;
@@ -37,12 +39,11 @@ Future<void> staffConsole() async {
         break;
 
       case 4:
-        print('Add New Staff functionality coming soon...');
-        pressEnterToContinue();
+        await addNewStaffMenu();
         break;
 
       case 5:
-        print('Edit Staff functionality coming soon...');
+        await updateStaffMenu();
         pressEnterToContinue();
         break;
 
