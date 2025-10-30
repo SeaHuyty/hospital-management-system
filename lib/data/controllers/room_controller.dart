@@ -62,13 +62,13 @@ class RoomController {
     db.execute('UPDATE rooms SET is_occupied = 1 WHERE id = ?', [roomId]);
   }
 
-  Future<List<Room>> getAvailableRoomsByType(String roomTypeName) async {
+  Future<List<Room>> getRoomsByType(String roomTypeName) async {
     final db = await DatabaseHelper().database;
     final rooms = db.select(
       '''
     SELECT r.* FROM rooms r
     JOIN room_types rt ON r.room_type_id = rt.id
-    WHERE rt.name = ? AND r.is_occupied = 0
+    WHERE rt.name = ?
   ''',
       [roomTypeName],
     );
@@ -79,20 +79,5 @@ class RoomController {
     final db = await DatabaseHelper().database;
     final beds = db.select('SELECT * FROM beds WHERE room_id = ?', [roomId]);
     return beds.map((b) => Bed.fromMap(b)).toList();
-  }
-
-  Future<void> setRoomOccupied(int roomId, bool isOccupied) async {
-    try {
-      final db = await DatabaseHelper().database;
-
-      db.execute(
-        'UPDATE rooms SET is_occupied = ? WHERE id = ?',
-        [isOccupied ? 1 : 0, roomId],
-      );
-
-      print('Room $roomId occupancy set to ${isOccupied ? "occupied" : "free"}');
-    } catch (error) {
-      print('Error updating room occupancy: $error');
-    }
   }
 }

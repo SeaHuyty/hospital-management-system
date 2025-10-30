@@ -9,9 +9,9 @@ class BedController {
       final db = await _dbHelper.database;
 
       db.execute('''
-        INSERT INTO beds (id, room_id, is_occupied)
-        VALUES (?, ?, ?)
-      ''', [bed.id, bed.roomId, bed.isOccupied]);
+        INSERT INTO beds (room_id, is_occupied)
+        VALUES (?, ?)
+      ''', [bed.roomId, bed.isOccupied ? 1 : 0]);
 
       final result = db.select('SELECT last_insert_rowid() as id;');
       return result.first['id'];

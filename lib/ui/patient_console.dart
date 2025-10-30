@@ -15,6 +15,10 @@ class PatientConsole {
   Future<void> viewPatient() async {
     List<Patient> patients = await _patientController.getAllPatients();
 
+    clearScreen();
+
+    print("\n\t\t\t\tPatient List\n");
+
     if (patients.isEmpty) {
       print('\t\t\t\tNo patients found.');
       pressEnterToContinue();
@@ -52,6 +56,7 @@ class PatientConsole {
   }
 
   Future<void> allocateBed() async {
+    clearScreen();
     stdout.write("\t\t\t\tEnter patient name: ");
     String name = stdin.readLineSync() ?? '';
     stdout.write("\t\t\t\tEnter age: ");
@@ -72,7 +77,7 @@ class PatientConsole {
     print("\t\t\t\t1. Shared Room");
     print("\t\t\t\t2. Private Room");
     print("\t\t\t\t3. VIP Room");
-    stdout.write("\t\t\t\tEnter your choice: ");
+    stdout.write("\n\t\t\t\tEnter your choice: ");
     int choice = int.tryParse(stdin.readLineSync() ?? '') ?? 1;
 
     String roomTypeName;
@@ -87,26 +92,36 @@ class PatientConsole {
         roomTypeName = 'Shared';
     }
 
-    // Fetch available rooms for that type
-    final availableRooms = await _roomController.getAvailableRoomsByType(
-      roomTypeName,
-    );
+    clearScreen();
 
-    if (availableRooms.isEmpty) {
-      print("\t\t\t\tNo available rooms for $roomTypeName type.");
+    final rooms = await _roomController.getRoomsByType(roomTypeName);
+
+    if (rooms.isEmpty) {
+      print("\n\t\t\t\tNo rooms found for $roomTypeName type.");
       return;
     }
 
-    print("\n\t\t\t\tAvailable Rooms for $roomTypeName:");
-    for (var room in availableRooms) {
-      print("\t\t\t\tRoom ID: ${room.roomId}");
-      if (roomTypeName.toLowerCase() == 'shared') {
+    print("\n\t\t\t\t[ ] = Available \t[X] = Occupied");
+    print("\n\t\t\t\t$roomTypeName Room");
+
+    final isShared = roomTypeName.toLowerCase() == 'shared';
+
+    if (isShared) {
+      final roomStatusRow = <String>[];
+
+      for (var room in rooms) {
         final beds = await _roomController.getBedsByRoom(room.roomId!);
-        String bedStatus = beds
-            .map((b) => b.isOccupied ? '[X]' : '[ ]')
-            .join(' ');
-        print("\t\t\t\tBeds: $bedStatus");
+        final allBedsFull = beds.isNotEmpty && beds.every((b) => b.isOccupied);
+        final status = allBedsFull ? '[X]' : '[ ]';
+        roomStatusRow.add("${room.roomId}. $status");
       }
+      print("\n\t\t\t\t${roomStatusRow.join('   ')}");
+    } else {
+      final roomStatusRow = rooms
+          .map((room) => "${room.roomId}. ${room.isOccupied ? '[X]' : '[ ]'}")
+          .join('   ');
+
+      print("\n\t\t\t\t$roomStatusRow");
     }
 
     // Choose room
@@ -115,26 +130,26 @@ class PatientConsole {
 
     int? bedId;
 
-    // If shared room → select bed
-    if (roomTypeName.toLowerCase() == 'shared') {
+    // Select bed
+    if (isShared) {
       final beds = await _roomController.getBedsByRoom(roomId);
       final availableBeds = beds.where((b) => !b.isOccupied).toList();
 
       if (availableBeds.isEmpty) {
-        print("\t\t\t\tNo available beds in this room.");
+        print("\n\t\t\t\tNo available beds in this room.");
         return;
       }
 
-      print("\n\t\t\t\tAvailable Beds:");
-      for (var bed in availableBeds) {
-        print("\t\t\t\tBed ID: ${bed.id}");
-      }
+      final bedStatus = beds
+          .map((b) => "${b.id}. ${b.isOccupied ? '[X]' : '[ ]'}")
+          .join('  ');
 
-      stdout.write("\t\t\t\tEnter Bed ID to assign: ");
+      print("\n\t\t\t\tBeds");
+      print("\n\t\t\t\t$bedStatus");
+
+      stdout.write("\n\t\t\t\tEnter Bed ID to assign: ");
       bedId = int.tryParse(stdin.readLineSync() ?? '') ?? -1;
     } else {
-      // Private/VIP just mark the room as occupied
-      await _roomController.setRoomOccupied(roomId, true);
       bedId = null;
     }
 
@@ -151,51 +166,55 @@ class PatientConsole {
       bedId: bedId,
     );
 
-    // Insert into DB (don't await here; insertPatient may be synchronous)
     await _patientController.insertPatient(patient);
-    print('\n\t\t\t\tPatient inserted successfully!\n');
+    //print('\n\t\t\t\tPatient inserted successfully!\n');
 
     final success = await _patientController.allocateBedToPatient(
       patient,
       roomTypeName,
+      roomId,
+      bedId
     );
 
     if (success) {
       print("\t\t\t\tBed allocated successfully!");
+      pressEnterToContinue();
     } else {
-      print("\t\t\t\tNo available room/bed found for this room type.");
+      //print("\t\t\t\tNo available room/bed found for this room type.");
+      pressEnterToContinue();
     }
   }
 
   Future<void> start() async {
     clearScreen();
     int? choice;
+    do {
+      print("\n\n\t\t\t\t=============================================\n");
+      print("\t\t\t\t\tPATIENT AND ROOM MANAGEMENT\t\n");
+      print("\t\t\t\t\t1. View Patients");
+      print("\t\t\t\t\t2. Allocate Bed");
+      print("\t\t\t\t\t0. Go Back");
+      print("\n\t\t\t\t=============================================\n");
 
-    print("\n\n\t\t\t\t=============================================\n");
-    print("\t\t\t\t\tPATIENT AND ROOM MANAGEMENT\t\n");
-    print("\t\t\t\t\t1. View Patients");
-    print("\t\t\t\t\t2. Allocate Bed");
-    print("\t\t\t\t\t0. Exit program");
-    print("\n\t\t\t\t=============================================\n");
+      stdout.write("\t\t\t\tEnter your choice: ");
+      String? input = stdin.readLineSync();
 
-    stdout.write("\t\t\t\tEnter your choice: ");
-    String? input = stdin.readLineSync();
+      choice = int.tryParse(input ?? '');
 
-    choice = int.tryParse(input ?? '');
-
-    switch (choice) {
-      case 1:
-        await viewPatient();
-        break;
-      case 2:
-        await allocateBed();
-        break;
-      case 0:
-        _hospitalConsole.start();
-        break;
-      default:
-        print("Invalid choice, Please try again");
-        break;
-    }
+      switch (choice) {
+        case 1:
+          await viewPatient();
+          break;
+        case 2:
+          await allocateBed();
+          break;
+        case 0:
+          _hospitalConsole.start();
+          break;
+        default:
+          print("Invalid choice, Please try again");
+          continue;
+      }
+    } while (choice != 0);
   }
 }
