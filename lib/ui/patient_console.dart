@@ -35,21 +35,12 @@ class PatientConsole {
             p.gender,
             p.nationality,
             p.roomId.toString(),
-            p.bedId.toString(),
           ],
         )
         .toList();
 
     printTable(
-      headers: [
-        'ID',
-        'Name',
-        'Age',
-        'Gender',
-        'Nationality',
-        'Room ID',
-        'Bed ID',
-      ],
+      headers: ['ID', 'Name', 'Age', 'Gender', 'Nationality', 'Room ID'],
       rows: rows,
     );
     pressEnterToContinue();
@@ -163,7 +154,6 @@ class PatientConsole {
       district: district,
       city: city,
       roomId: roomId,
-      bedId: bedId,
     );
 
     await _patientController.insertPatient(patient);

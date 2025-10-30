@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:hospital_management_system/domain/staff.dart';
 import 'package:hospital_management_system/ui/components/clear_screen.dart';
-import 'package:hospital_management_system/ui/components/pause_message.dart';
 import 'package:hospital_management_system/ui/patient_console.dart'; 
 import 'package:hospital_management_system/ui/staff_console.dart';
 import 'package:hospital_management_system/ui/auth/authentication.dart';
@@ -40,12 +39,10 @@ class HospitalConsole {
           await patientConsole.start();
           break;
         case 0:
-          print("\n\t\t\t\tExited Program\n");
           break;
         default:
           print("\n\t\t\t\tInvalid choice! Please try again.");
-          pressEnterToContinue();
-          continue;
+          break;
       }
     } while (choice != 0);
   }
