@@ -7,13 +7,13 @@ Future<void> seedRooms() async {
   final rooms = [
       Room(
         roomTypeId: 1,           
-        capacity: 3,
+        capacity: 4,
         departmentId: 1,        
         isOccupied: false,
       ),
       Room(
         roomTypeId: 1,
-        capacity: 3,
+        capacity: 4,
         departmentId: 2,        
         isOccupied: false,
       ),

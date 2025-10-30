@@ -6,11 +6,9 @@ Future<void> seedBeds() async {
   final RoomController roomController = RoomController();
   final BedController bedController = BedController();
 
-  // Get all shared rooms
-  final sharedRooms = await roomController.getAvailableRoomsByType('Shared');
+  final sharedRooms = await roomController.getRoomsByType('Shared');
 
   for (var room in sharedRooms) {
-    // Check existing beds for this room
     final existingBeds = await roomController.getBedsByRoom(room.roomId!);
     if (existingBeds.isNotEmpty) {
       print('Room ${room.roomId} already has beds, skipping...');
@@ -19,10 +17,7 @@ Future<void> seedBeds() async {
 
     // Create beds according to room capacity
     for (int i = 1; i <= room.capacity; i++) {
-      Bed bed = Bed(
-        roomId: room.roomId,
-        isOccupied: false,
-      );
+      Bed bed = Bed(roomId: room.roomId, isOccupied: false);
 
       await bedController.insertBed(bed);
       print('Inserted bed $i for Room ${room.roomId}');

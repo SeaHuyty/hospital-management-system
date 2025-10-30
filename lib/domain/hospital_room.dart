@@ -78,35 +78,6 @@ class Bed {
   Map<String, dynamic> toMap() {
     return {'id': id, 'room_id': roomId, 'is_occupied': isOccupied ? 1 : 0};
   }
-
-  // Future<bool> isRoomAvailable(Database db, Room room) async {
-  //   // Get the room type
-  //   final roomTypeResult = await db.query(
-  //     'room_types',
-  //     where: 'id = ?',
-  //     whereArgs: [room.roomTypeId],
-  //   );
-
-  //   if (roomTypeResult.isEmpty) return false;
-
-  //   final roomType = RoomType.fromMap(roomTypeResult.first);
-
-  //   // 🏠 For private/VIP rooms — check isOccupied flag
-  //   if (roomType.name.toLowerCase() == 'private' ||
-  //       roomType.name.toLowerCase() == 'vip') {
-  //     return !room.isOccupied;
-  //   }
-
-  //   // 🛏️ For shared/public rooms — check bed availability
-  //   final beds = await db.query(
-  //     'beds',
-  //     where: 'room_id = ? AND is_occupied = 0',
-  //     whereArgs: [room.id],
-  //   );
-
-  //   // Room is available if there's at least one free bed
-  //   return beds.isNotEmpty;
-  //}
 }
 
 class Room {
