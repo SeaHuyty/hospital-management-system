@@ -49,7 +49,12 @@ class PatientController {
   ///
   /// [roomTypeName] e.g. "VIP", "Private", "Shared"
   /// Returns true if successful, false if no bed available
-  Future<bool> allocateBedToPatient(Patient patient, String roomTypeName) async {
+  Future<bool> allocateBedToPatient(
+    Patient patient,
+    String roomTypeName,
+    int roomId,
+    int? bedId,
+  ) async {
     try {
       final db = await _dbHelper.database;
 
@@ -60,71 +65,106 @@ class PatientController {
       );
 
       if (roomTypeResult.isEmpty) {
-        print('\nRoom type "$roomTypeName" does not exist.');
+        print('\n\t\t\t\tRoom type "$roomTypeName" does not exist.');
         return false;
       }
 
       final roomType = RoomType.fromMap(roomTypeResult.first);
 
-      // Find a room of that type that has a free bed
-      final roomResult = db.select('''
-        SELECT r.id AS room_id
-        FROM rooms r
-        JOIN room_types rt ON r.room_type_id = rt.id
-        WHERE rt.id = ?;
-      ''', [roomType.id]);
+      // Check if chosen room exists and belongs to this type
+      final roomCheck = db.select(
+        '''
+      SELECT r.id, r.is_occupied 
+      FROM rooms r
+      WHERE r.id = ? AND r.room_type_id = ?;
+    ''',
+        [roomId, roomType.id],
+      );
 
-      if (roomResult.isEmpty) {
-        print('\nNo room found for type "${roomType.name}".');
+      if (roomCheck.isEmpty) {
+        print('\n\t\t\t\tInvalid room ID or does not belong to type "$roomTypeName".');
         return false;
       }
 
-      // Loop through rooms to find one with an available bed
-      for (final row in roomResult) {
-        final roomId = row['room_id'] as int;
+      final roomData = roomCheck.first;
+      final isRoomOccupied = (roomData['is_occupied'] == 1);
 
-        // Find a free bed in that room
-        final bedResult = db.select(
-          'SELECT * FROM beds WHERE room_id = ? AND is_occupied = 0 LIMIT 1;',
-          [roomId],
+      // Handle Shared rooms (with beds)
+      if (roomTypeName.toLowerCase() == 'shared') {
+        if (bedId == null) {
+          print('\n\t\t\t\tBed ID is required for shared rooms.');
+          return false;
+        }
+
+        final bedCheck = db.select(
+          '''
+        SELECT * FROM beds 
+        WHERE id = ? AND room_id = ?;
+      ''',
+          [bedId, roomId],
         );
 
-        if (bedResult.isNotEmpty) {
-          final bed = Bed.fromMap(bedResult.first);
-
-          // Allocate this bed to the patient
-          db.execute('''
-            UPDATE beds SET is_occupied = 1 WHERE id = ?;
-          ''', [bed.id]);
-
-          db.execute('''
-            UPDATE patients SET room_id = ?, bed_id = ? WHERE id = ?;
-          ''', [roomId, bed.id, patient.id]);
-
-          print('\n\t\t\t\tPatient "${patient.name}" assigned to:');
-          print('\t\t\t\tRoom Type: ${roomType.name}');
-          print('\t\t\t\tRoom ID: $roomId');
-          print('\t\t\t\tBed ID: ${bed.id}\n');
-
-          // Optional: check if all beds are full to mark room as occupied
-          final remainingBeds = db.select(
-            'SELECT * FROM beds WHERE room_id = ? AND is_occupied = 0;',
-            [roomId],
-          );
-
-          if (remainingBeds.isEmpty) {
-            db.execute('UPDATE rooms SET is_occupied = 1 WHERE id = ?;', [roomId]);
-          }
-
-          return true;
+        if (bedCheck.isEmpty) {
+          print('\n\t\t\t\tInvalid bed ID for this room.');
+          return false;
         }
+
+        final bed = Bed.fromMap(bedCheck.first);
+
+        if (bed.isOccupied) {
+          print('\n\t\t\t\tSelected bed is already occupied.');
+          return false;
+        }
+
+        // Assign the chosen bed
+        db.execute('UPDATE beds SET is_occupied = 1 WHERE id = ?;', [bedId]);
+        db.execute(
+          'UPDATE patients SET room_id = ?, bed_id = ? WHERE id = ?;',
+          [roomId, bedId, patient.id],
+        );
+
+        // Check if all beds are full to mark room occupied
+        final remainingBeds = db.select(
+          'SELECT * FROM beds WHERE room_id = ? AND is_occupied = 0;',
+          [roomId],
+        );
+        if (remainingBeds.isEmpty) {
+          db.execute('UPDATE rooms SET is_occupied = 1 WHERE id = ?;', [
+            roomId,
+          ]);
+        }
+
+        print('\n\t\t\t\tPatient "${patient.name}" assigned to:');
+        print('\t\t\t\tRoom Type: ${roomType.name}');
+        print('\t\t\t\tRoom ID: $roomId');
+        print('\t\t\t\tBed ID: $bedId\n');
+
+        return true;
+      } else {
+        // For Private/VIP rooms, we only need to check if selected room is occupied
+        if (isRoomOccupied) {
+          print("\n\t\t\t\tSelected room is already occupied.");
+          return false;
+        }
+
+        // Mark room as occupied
+        db.execute('UPDATE rooms SET is_occupied = 1 WHERE id = ?;', [roomId]);
+
+        // Assign room to patient (no bed)
+        db.execute(
+          'UPDATE patients SET room_id = ?, bed_id = NULL WHERE id = ?;',
+          [roomId, patient.id],
+        );
+
+        print('\n\t\t\t\tPatient "${patient.name}" assigned to:');
+        print('\t\t\t\tRoom Type: ${roomType.name}');
+        print('\t\t\t\tRoom ID: $roomId\n');
+
+        return true; 
       }
-      // If no free bed found in any room
-      print('\nNo available bed found for room type "${roomType.name}".');
-      return false;
     } catch (error) {
       print("Error: $error");
       return false;
-    } 
-  } 
+    }
+  }
 }
