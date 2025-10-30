@@ -21,8 +21,9 @@ class HospitalConsole {
       clearScreen();
       print("\n\n\t\t\t\t=============================================\n");
       print("\t\t\t\t\tHOSPITAL MANAGEMENT SYSTEM\t\n");
-      print("\t\t\t\t\t1. Staff");
-      print("\t\t\t\t\t2. Room");
+      print("\t\t\t\t\t1. Manange Staff");
+      print("\t\t\t\t\t2. Manage Room");
+      print("\t\t\t\t\t3. Allocate Patient To Bed");
       print("\t\t\t\t\t0. Exit program");
       print("\n\t\t\t\t=============================================\n");
 
@@ -38,6 +39,9 @@ class HospitalConsole {
           break;
         case 2:
           await patientConsole.start();
+          break;
+        case 3: 
+          await patientConsole.allocateBed();
           break;
         case 0:
           print("\n\t\t\t\tExited Program\n");
