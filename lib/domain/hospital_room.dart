@@ -83,21 +83,25 @@ class Bed {
 class Room {
   final int? _roomNumber;
   final int? _roomTypeId;
+  final int _capacity;
   final int? _departmentId;
   final bool _isOccupied;
 
   Room({
     int? roomNumber,
     int? roomTypeId,
+    required capacity,
     int? departmentId,
     required bool isOccupied,
   }) : _roomNumber = roomNumber,
        _roomTypeId = roomTypeId,
+       _capacity = capacity,
        _departmentId = departmentId,
        _isOccupied = isOccupied;
 
   int? get roomId => _roomNumber;
   int? get roomTypeId => _roomTypeId;
+  int get capacity => _capacity;
   int? get departmentId => _departmentId;
   bool get isOccupied => _isOccupied;
 
@@ -105,18 +109,10 @@ class Room {
     return Room(
       roomNumber: room['id'] as int?,
       roomTypeId: room['room_type_id'] as int?,
+      capacity: room['capacity'],
       departmentId: room['department_id'] as int?,
       // SQLite uses 0/1 for booleans to convert manually
       isOccupied: (room['is_occupied'] == 1),
     );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': roomId,
-      'room_type_id': roomTypeId,
-      'department_id': departmentId,
-      'is_occupied': isOccupied ? 1 : 0,
-    };
   }
 }

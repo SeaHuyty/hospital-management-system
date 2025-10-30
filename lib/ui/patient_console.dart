@@ -35,12 +35,21 @@ class PatientConsole {
             p.gender,
             p.nationality,
             p.roomId.toString(),
+            p.bedId.toString(),
           ],
         )
         .toList();
 
     printTable(
-      headers: ['ID', 'Name', 'Age', 'Gender', 'Nationality', 'Room ID'],
+      headers: [
+        'ID',
+        'Name',
+        'Age',
+        'Gender',
+        'Nationality',
+        'Room ID',
+        'Bed ID',
+      ],
       rows: rows,
     );
     pressEnterToContinue();
@@ -155,6 +164,7 @@ class PatientConsole {
       district: district,
       city: city,
       roomId: roomId,
+      bedId: bedId,
     );
 
     final success = await _patientController.allocateBedToPatient(

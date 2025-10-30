@@ -25,6 +25,7 @@ class Patient {
   final String _district;
   final String _city;
   final int _roomId;
+  final int? _bedId;
 
   Patient({
     int? id,
@@ -36,6 +37,7 @@ class Patient {
     required String district,
     required String city,
     required int roomId,
+    int? bedId,
   }) : _id = id,
        _name = name,
        _age = age,
@@ -44,7 +46,8 @@ class Patient {
        _commune = commune,
        _district = district,
        _city = city,
-       _roomId = roomId;
+       _roomId = roomId,
+       _bedId = bedId;
 
   int? get id => _id;
   String get name => _name;
@@ -55,6 +58,7 @@ class Patient {
   String get district => _district;
   String get city => _city;
   int get roomId => _roomId;
+  int? get bedId => _bedId;
 
   // Convert Map to Object for retrieving from db
   factory Patient.fromMap(Map<String, dynamic> p) {
@@ -68,6 +72,7 @@ class Patient {
       district: p['district'],
       city: p['city'],
       roomId: p['room_id'],
+      bedId: p['bed_id'],
     );
   }
 }

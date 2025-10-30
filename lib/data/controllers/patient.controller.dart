@@ -1,4 +1,5 @@
 import 'package:hospital_management_system/data/config/database.dart';
+import 'package:hospital_management_system/domain/hospital_room.dart';
 import 'package:hospital_management_system/domain/patient.dart';
 
 class PatientController {
