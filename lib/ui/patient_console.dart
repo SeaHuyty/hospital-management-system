@@ -13,6 +13,10 @@ class PatientConsole {
   Future<void> viewPatient() async {
     List<Patient> patients = await _patientController.getAllPatients();
 
+    clearScreen();
+
+    print("\n\t\t\t\tPatient List\n");
+
     if (patients.isEmpty) {
       print('\t\t\t\tNo patients found.');
       pressEnterToContinue();
@@ -40,7 +44,8 @@ class PatientConsole {
     pressEnterToContinue();
   }
 
-  void allocateBed() {
+  Future<void> allocateBed() async {
+    clearScreen();
     stdout.write("\t\t\t\tEnter patient name: ");
     String name = stdin.readLineSync() ?? '';
     stdout.write("\t\t\t\tEnter age: ");
@@ -56,8 +61,86 @@ class PatientConsole {
     String district = stdin.readLineSync() ?? '';
     stdout.write("\t\t\t\tEnter city: ");
     String city = stdin.readLineSync() ?? '';
-    stdout.write('\t\t\t\tEnter room ID: ');
-    int roomId = int.tryParse(stdin.readLineSync() ?? '') ?? 1;
+    // Choose room type
+    print("\n\t\t\t\tChoose room type:");
+    print("\t\t\t\t1. Shared Room");
+    print("\t\t\t\t2. Private Room");
+    print("\t\t\t\t3. VIP Room");
+    stdout.write("\n\t\t\t\tEnter your choice: ");
+    int choice = int.tryParse(stdin.readLineSync() ?? '') ?? 1;
+
+    String roomTypeName;
+    switch (choice) {
+      case 2:
+        roomTypeName = 'Private';
+        break;
+      case 3:
+        roomTypeName = 'VIP';
+        break;
+      default:
+        roomTypeName = 'Shared';
+    }
+
+    clearScreen();
+
+    final rooms = await _roomController.getRoomsByType(roomTypeName);
+
+    if (rooms.isEmpty) {
+      print("\n\t\t\t\tNo rooms found for $roomTypeName type.");
+      return;
+    }
+
+    print("\n\t\t\t\t[ ] = Available \t[X] = Occupied");
+    print("\n\t\t\t\t$roomTypeName Room");
+
+    final isShared = roomTypeName.toLowerCase() == 'shared';
+
+    if (isShared) {
+      final roomStatusRow = <String>[];
+
+      for (var room in rooms) {
+        final beds = await _roomController.getBedsByRoom(room.roomId!);
+        final allBedsFull = beds.isNotEmpty && beds.every((b) => b.isOccupied);
+        final status = allBedsFull ? '[X]' : '[ ]';
+        roomStatusRow.add("${room.roomId}. $status");
+      }
+      print("\n\t\t\t\t${roomStatusRow.join('   ')}");
+    } else {
+      final roomStatusRow = rooms
+          .map((room) => "${room.roomId}. ${room.isOccupied ? '[X]' : '[ ]'}")
+          .join('   ');
+
+      print("\n\t\t\t\t$roomStatusRow");
+    }
+
+    // Choose room
+    stdout.write("\n\t\t\t\tEnter Room ID to assign: ");
+    int roomId = int.tryParse(stdin.readLineSync() ?? '') ?? -1;
+
+    int? bedId;
+
+    // Select bed
+    if (isShared) {
+      final beds = await _roomController.getBedsByRoom(roomId);
+      final availableBeds = beds.where((b) => !b.isOccupied).toList();
+
+      if (availableBeds.isEmpty) {
+        print("\n\t\t\t\tNo available beds in this room.");
+        return;
+      }
+
+      final bedStatus = beds
+          .map((b) => "${b.id}. ${b.isOccupied ? '[X]' : '[ ]'}")
+          .join('  ');
+
+      print("\n\t\t\t\tBeds");
+      print("\n\t\t\t\t$bedStatus");
+
+      stdout.write("\n\t\t\t\tEnter Bed ID to assign: ");
+      bedId = int.tryParse(stdin.readLineSync() ?? '') ?? -1;
+    } else {
+      bedId = null;
+    }
 
     // Create Patient Object
     Patient patient = Patient(
@@ -71,40 +154,55 @@ class PatientConsole {
       roomId: roomId,
     );
 
-    // Insert into DB (don't await here; insertPatient may be synchronous)
-    _patientController.insertPatient(patient);
-    print('Patient inserted successfully!\n');
+    await _patientController.insertPatient(patient);
+    //print('\n\t\t\t\tPatient inserted successfully!\n');
+
+    final success = await _patientController.allocateBedToPatient(
+      patient,
+      roomTypeName,
+      roomId,
+      bedId
+    );
+
+    if (success) {
+      print("\t\t\t\tBed allocated successfully!");
+      pressEnterToContinue();
+    } else {
+      //print("\t\t\t\tNo available room/bed found for this room type.");
+      pressEnterToContinue();
+    }
   }
 
   Future<void> start() async {
     clearScreen();
     int? choice;
+    do {
+      print("\n\n\t\t\t\t=============================================\n");
+      print("\t\t\t\t\tPATIENT AND ROOM MANAGEMENT\t\n");
+      print("\t\t\t\t\t1. View Patients");
+      print("\t\t\t\t\t2. Allocate Bed");
+      print("\t\t\t\t\t0. Go Back");
+      print("\n\t\t\t\t=============================================\n");
 
-    print("\n\n\t\t\t\t=============================================\n");
-    print("\t\t\t\t\tPATIENT AND ROOM MANAGEMENT\t\n");
-    print("\t\t\t\t\t1. View Patients");
-    print("\t\t\t\t\t2. Allocate Bed");
-    print("\t\t\t\t\t0. Exit program");
-    print("\n\t\t\t\t=============================================\n");
+      stdout.write("\t\t\t\tEnter your choice: ");
+      String? input = stdin.readLineSync();
 
-    stdout.write("\t\t\t\tEnter your choice: ");
-    String? input = stdin.readLineSync();
+      choice = int.tryParse(input ?? '');
 
-    choice = int.tryParse(input ?? '');
-
-    switch (choice) {
-      case 1:
-        await viewPatient();
-        break;
-      case 2:
-        allocateBed();
-        break;
-      case 0:
-        _hospitalConsole.start();
-        break;
-      default:
-        print("Invalid choice, Please try again");
-        break;
-    }
+      switch (choice) {
+        case 1:
+          await viewPatient();
+          break;
+        case 2:
+          await allocateBed();
+          break;
+        case 0:
+          _hospitalConsole.start();
+          break;
+        default:
+          print("Invalid choice, Please try again");
+          continue;
+      }
+    } while (choice != 0);
   }
 }
