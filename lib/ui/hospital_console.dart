@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'package:hospital_management_system/domain/staff.dart';
+import 'package:hospital_management_system/domain/staff/staff_models.dart';
 import 'package:hospital_management_system/ui/components/clear_screen.dart';
 import 'package:hospital_management_system/ui/components/pause_message.dart';
 import 'package:hospital_management_system/ui/patient_console.dart';
-import 'package:hospital_management_system/ui/room_console.dart'; 
+import 'package:hospital_management_system/ui/room_console.dart';
 import 'package:hospital_management_system/ui/staff_console.dart';
 import 'package:hospital_management_system/ui/auth/authentication.dart';
 
@@ -42,7 +42,7 @@ class HospitalConsole {
         case 2:
           await roomConsole.start();
           break;
-        case 3: 
+        case 3:
           await patientConsole.start();
           break;
         case 0:

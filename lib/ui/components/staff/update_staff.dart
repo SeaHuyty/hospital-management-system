@@ -5,7 +5,7 @@ import 'package:hospital_management_system/data/controllers/staff/nurse.dart';
 import 'package:hospital_management_system/data/controllers/staff/security.dart';
 import 'package:hospital_management_system/data/controllers/staff/cleaner.dart';
 import 'package:hospital_management_system/data/controllers/staff/administrator.dart';
-import 'package:hospital_management_system/domain/staff.dart';
+import 'package:hospital_management_system/domain/staff/staff_models.dart';
 import 'package:hospital_management_system/ui/components/clear_screen.dart';
 import 'package:hospital_management_system/ui/components/pause_message.dart';
 import 'package:hospital_management_system/ui/components/table_printer.dart';

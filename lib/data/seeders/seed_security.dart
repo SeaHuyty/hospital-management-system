@@ -1,5 +1,5 @@
 import '../controllers/staff/security.dart';
-import '../../domain/staff.dart';
+import '../../domain/staff/staff_models.dart';
 
 Future<void> seedSecurityStaff() async {
   SecurityControllers securityController = SecurityControllers();

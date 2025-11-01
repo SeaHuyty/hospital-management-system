@@ -1,5 +1,5 @@
 import 'package:hospital_management_system/data/config/database.dart';
-import 'package:hospital_management_system/domain/staff.dart';
+import 'package:hospital_management_system/domain/staff/staff_models.dart';
 
 class StaffControllers {
   Future<int> insertBaseStaff(Staff staff) async {

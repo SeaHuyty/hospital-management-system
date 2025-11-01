@@ -1,5 +1,5 @@
 import '../controllers/staff/cleaner.dart';
-import '../../domain/staff.dart';
+import '../../domain/staff/staff_models.dart';
 
 Future<void> seedCleaners() async {
   CleanerControllers cleanerController = CleanerControllers();
