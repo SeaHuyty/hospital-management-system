@@ -13,7 +13,6 @@ Future<void> viewAllStaffs() async {
     await Future.delayed(Duration(milliseconds: 200));
 
     StaffControllers staffController = StaffControllers();
-    print('\nRetrieving all staff...');
     List<Staff> staff = await staffController.getAllStaff();
 
     if (staff.isEmpty) {

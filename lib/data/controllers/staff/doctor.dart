@@ -38,6 +38,59 @@ class DoctorControllers {
   Future<List<Doctor>> getAllDoctors() async {
     try {
       final db = await DatabaseHelper().database;
+      final result = db.select('''SELECT
+          s.*, 
+          d.specialization, 
+          d.license_number, 
+          d.qualification
+        FROM staff s
+        INNER JOIN doctors d ON s.id = d.staff_id
+        WHERE s.staff_type = 'doctor'
+        ORDER BY s.last_name, s.first_name;''');
+
+      return result.map((row) => Doctor.fromMap(row)).toList();
+    } catch (error) {
+      print('Error fetching doctors: $error');
+      return [];
+    }
+  }
+
+  Future<bool> updateDoctorField(String staffId, String fieldName, String newValue) async {
+    try {
+      final db = await DatabaseHelper().database;
+
+      String columnName;
+      switch (fieldName) {
+        case 'specialization':
+          columnName = 'specialization';
+          break;
+        case 'licenseNumber':
+          columnName = 'license_number';
+          break;
+        case 'qualification':
+          columnName = 'qualification';
+          break;
+        default:
+          print('Error: Unknown doctor field name $fieldName');
+          return false;
+      }
+
+      db.execute('UPDATE doctors SET $columnName = ? WHERE staff_id = ?', [
+        newValue,
+        staffId,
+      ]);
+
+      print('Doctor $fieldName updated successfully');
+      return true;
+    } catch (error) {
+      print('Error updating doctor field: $error');
+      return false;
+    }
+  }
+
+  Future<Doctor?> getDoctorByStaffId(String staffId) async {
+    try {
+      final db = await DatabaseHelper().database;
       final result = db.select(
         '''SELECT
           s.*, 
@@ -46,14 +99,17 @@ class DoctorControllers {
           d.qualification
         FROM staff s
         INNER JOIN doctors d ON s.id = d.staff_id
-        WHERE s.staff_type = 'doctor'
-        ORDER BY s.last_name, s.first_name;''',
+        WHERE s.id = ? AND s.staff_type = 'doctor';''',
+        [staffId],
       );
 
-      return result.map((row) => Doctor.fromMap(row)).toList();
+      if (result.isNotEmpty) {
+        return Doctor.fromMap(result.first);
+      }
+      return null;
     } catch (error) {
-      print('Error fetching doctors: $error');
-      return [];
+      print('Error fetching doctor by staff ID: $error');
+      return null;
     }
   }
 }

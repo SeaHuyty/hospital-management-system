@@ -12,7 +12,6 @@ Future<void> main() async {
     HospitalConsole console = HospitalConsole();
     DatabaseHelper database = DatabaseHelper();
 
-    print('Connecting to database...');
     bool connected = await database.connectToDatabase();
 
     if (!connected) {
@@ -30,8 +29,6 @@ Future<void> main() async {
 }
 
 Future<void> _recreateTablesForDevelopment() async {
-  print('Recreating tables...');
   DatabaseHelper database = DatabaseHelper();
   await database.recreateTables();
-  print('Tables recreated');
 }

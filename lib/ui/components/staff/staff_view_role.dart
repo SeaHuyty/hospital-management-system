@@ -53,7 +53,6 @@ Future<void> staffViewByRole() async {
         break;
 
       case 0:
-        print('Returning to staff menu...');
         break;
 
       default:
