@@ -1,20 +1,3 @@
-class Address {
-  final String _commune;
-  final String _district;
-  final String _city;
-
-  Address(this._commune, this._district, this._city);
-
-  String get commune => _commune;
-  String get district => _district;
-  String get city => _city;
-
-  @override
-  String toString() {
-    return "Sangkat: $commune, Khan: $district, Krong/Khet: $city";
-  }
-}
-
 class Patient {
   final int? _id;
   final String _name;

@@ -5,22 +5,36 @@ class RoomController {
   Future<int> insertRoom(Room room) async {
     try {
       final db = await DatabaseHelper().database;
-      final stmt = db.prepare('''
-      INSERT INTO rooms (room_type_id, capacity, department_id, is_occupied)
-        VALUES (?, ?, ?, ?)
-      ''');
-      stmt.execute([
-        room.roomTypeId,
-        room.capacity,
-        room.departmentId,
-        room.isOccupied ? 1 : 0,
-      ]);
-      stmt.dispose();
 
-      final result = db.select('SELECT last_insert_rowid() as id;');
-      return result.first['id'];
+      // Validate that the room type exists
+      final typeCheck = db.select('SELECT id FROM room_types WHERE id = ?;', [
+        room.roomTypeId,
+      ]);
+
+      if (typeCheck.isEmpty) {
+        print('Invalid room type ID: ${room.roomTypeId}');
+        return -1;
+      }
+
+      db.execute(
+        '''
+      INSERT INTO rooms (room_type_id, capacity, department_id, is_occupied)
+      VALUES (?, ?, ?, ?);
+    ''',
+        [
+          room.roomTypeId,
+          room.capacity,
+          room.departmentId,
+          room.isOccupied ? 1 : 0,
+        ],
+      );
+
+      final result = db.select('SELECT last_insert_rowid() AS id;');
+      final insertedId = result.first['id'] as int;
+
+      return insertedId;
     } catch (error) {
-      print("Error inserting room: $error");
+      print('Error inserting room: $error');
       return -1;
     }
   }
@@ -55,11 +69,6 @@ class RoomController {
   Future<void> deleteRoom(int id) async {
     final db = await DatabaseHelper().database;
     db.execute('DELETE FROM rooms WHERE id = ?', [id]);
-  }
-
-  Future<void> markRoomOccupied(int roomId) async {
-    final db = await DatabaseHelper().database;
-    db.execute('UPDATE rooms SET is_occupied = 1 WHERE id = ?', [roomId]);
   }
 
   Future<List<Room>> getRoomsByType(String roomTypeName) async {

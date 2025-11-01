@@ -5,11 +5,9 @@ import 'package:hospital_management_system/domain/patient.dart';
 import 'package:hospital_management_system/ui/components/clear_screen.dart';
 import 'package:hospital_management_system/ui/components/pause_message.dart';
 import 'package:hospital_management_system/ui/components/table_printer.dart';
-import 'package:hospital_management_system/ui/hospital_console.dart';
 
 class PatientConsole {
   final PatientController _patientController = PatientController();
-  final HospitalConsole _hospitalConsole = HospitalConsole();
   final RoomController _roomController = RoomController();
 
   Future<void> viewPatient() async {
@@ -184,11 +182,12 @@ class PatientConsole {
   }
 
   Future<void> start() async {
-    clearScreen();
-    int? choice;
-    do {
+    bool inPatientMenu = true;
+
+    while (inPatientMenu) {
+      clearScreen();
       print("\n\n\t\t\t\t=============================================\n");
-      print("\t\t\t\t\tPATIENT AND ROOM MANAGEMENT\t\n");
+      print("\t\t\t\t\tPATIENT MANAGEMENT\t\n");
       print("\t\t\t\t\t1. View Patients");
       print("\t\t\t\t\t2. Allocate Bed");
       print("\t\t\t\t\t0. Go Back");
@@ -197,7 +196,7 @@ class PatientConsole {
       stdout.write("\t\t\t\tEnter your choice: ");
       String? input = stdin.readLineSync();
 
-      choice = int.tryParse(input ?? '');
+      int? choice = int.tryParse(input ?? '');
 
       switch (choice) {
         case 1:
@@ -207,12 +206,12 @@ class PatientConsole {
           await allocateBed();
           break;
         case 0:
-          _hospitalConsole.start();
-          return;
+          inPatientMenu = false;
+          break;
         default:
           print("Invalid choice, Please try again");
           continue;
       }
-    } while (choice != 0);
+    }
   }
 }
