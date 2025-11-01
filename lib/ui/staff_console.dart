@@ -48,7 +48,6 @@ Future<void> staffConsole() async {
         break;
 
       case 0:
-        print('Returning to main menu...');
         break;
 
       default:

@@ -81,11 +81,7 @@ class StaffControllers {
     }
   }
 
-  Future<bool> updateStaffField(
-    String staffId,
-    String fieldName,
-    String newValue,
-  ) async {
+  Future<bool> updateStaffField(String staffId, String fieldName, String newValue) async {
     try {
       final db = await DatabaseHelper().database;
       final now = DateTime.now().toIso8601String();

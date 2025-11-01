@@ -52,7 +52,6 @@ Future<void> addNewStaffMenu() async {
         break;
 
       case 0:
-        print('Returning to staff menu...');
         break;
 
       default:

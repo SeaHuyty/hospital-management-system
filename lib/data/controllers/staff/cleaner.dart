@@ -54,4 +54,62 @@ class CleanerControllers {
       return [];
     }
   }
+
+  Future<bool> updateCleanerField(String staffId, String fieldName, String newValue) async {
+    try {
+      final db = await DatabaseHelper().database;
+
+      String columnName;
+      switch (fieldName) {
+        case 'title':
+          columnName = 'title';
+          break;
+        case 'assignedDepartment':
+          columnName = 'assigned_department';
+          break;
+        case 'assignedArea':
+          columnName = 'assigned_area';
+          break;
+        default:
+          print('Error: Unknown cleaner field name $fieldName');
+          return false;
+      }
+
+      db.execute('UPDATE cleaners SET $columnName = ? WHERE staff_id = ?', [
+        newValue,
+        staffId,
+      ]);
+
+      print('Cleaner $fieldName updated successfully');
+      return true;
+    } catch (error) {
+      print('Error updating cleaner field: $error');
+      return false;
+    }
+  }
+
+  Future<Cleaner?> getCleanerByStaffId(String staffId) async {
+    try {
+      final db = await DatabaseHelper().database;
+      final result = db.select(
+        '''SELECT
+          s.*, 
+          c.title, 
+          c.assigned_department, 
+          c.assigned_area
+        FROM staff s
+        INNER JOIN cleaners c ON s.id = c.staff_id
+        WHERE s.id = ? AND s.staff_type = 'cleaner';''',
+        [staffId],
+      );
+
+      if (result.isNotEmpty) {
+        return Cleaner.fromMap(result.first);
+      }
+      return null;
+    } catch (error) {
+      print('Error fetching cleaner by staff ID: $error');
+      return null;
+    }
+  }
 }

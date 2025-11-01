@@ -47,4 +47,58 @@ class NurseControllers {
       return [];
     }
   }
+
+  Future<bool> updateNurseField(String staffId, String fieldName, String newValue) async {
+    try {
+      final db = await DatabaseHelper().database;
+
+      String columnName;
+      switch (fieldName) {
+        case 'department':
+          columnName = 'department';
+          break;
+        case 'certification':
+          columnName = 'certification';
+          break;
+        default:
+          print('Error: Unknown nurse field name $fieldName');
+          return false;
+      }
+
+      db.execute('UPDATE nurses SET $columnName = ? WHERE staff_id = ?', [
+        newValue,
+        staffId,
+      ]);
+
+      print('Nurse $fieldName updated successfully');
+      return true;
+    } catch (error) {
+      print('Error updating nurse field: $error');
+      return false;
+    }
+  }
+
+  Future<Nurse?> getNurseByStaffId(String staffId) async {
+    try {
+      final db = await DatabaseHelper().database;
+      final result = db.select(
+        '''SELECT
+          s.*, 
+          n.department, 
+          n.certification
+        FROM staff s
+        INNER JOIN nurses n ON s.id = n.staff_id
+        WHERE s.id = ? AND s.staff_type = 'nurse';''',
+        [staffId],
+      );
+
+      if (result.isNotEmpty) {
+        return Nurse.fromMap(result.first);
+      }
+      return null;
+    } catch (error) {
+      print('Error fetching nurse by staff ID: $error');
+      return null;
+    }
+  }
 }

@@ -54,4 +54,62 @@ class AdministratorControllers {
       return [];
     }
   }
+
+  Future<bool> updateAdministratorField(String staffId, String fieldName, String newValue) async {
+    try {
+      final db = await DatabaseHelper().database;
+
+      String columnName;
+      switch (fieldName) {
+        case 'username':
+          columnName = 'username';
+          break;
+        case 'password':
+          columnName = 'password';
+          break;
+        case 'department':
+          columnName = 'department';
+          break;
+        default:
+          print('Error: Unknown administrator field name $fieldName');
+          return false;
+      }
+
+      db.execute(
+        'UPDATE administrators SET $columnName = ? WHERE staff_id = ?',
+        [newValue, staffId],
+      );
+
+      print('Administrator $fieldName updated successfully');
+      return true;
+    } catch (error) {
+      print('Error updating administrator field: $error');
+      return false;
+    }
+  }
+
+  Future<Administrator?> getAdministratorByStaffId(String staffId) async {
+    try {
+      final db = await DatabaseHelper().database;
+      final result = db.select(
+        '''SELECT
+          s.*, 
+          a.username,
+          a.password,
+          a.department
+        FROM staff s
+        INNER JOIN administrators a ON s.id = a.staff_id
+        WHERE s.id = ? AND s.staff_type = 'administrator';''',
+        [staffId],
+      );
+
+      if (result.isNotEmpty) {
+        return Administrator.fromMap(result.first);
+      }
+      return null;
+    } catch (error) {
+      print('Error fetching administrator by staff ID: $error');
+      return null;
+    }
+  }
 }
