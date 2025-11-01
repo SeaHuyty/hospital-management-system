@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:hospital_management_system/data/controllers/patient.controller.dart';
-import 'package:hospital_management_system/data/controllers/room_controller.dart';
+import 'package:hospital_management_system/data/controllers/room/patient.controller.dart';
+import 'package:hospital_management_system/data/controllers/room/room_controller.dart';
 import 'package:hospital_management_system/domain/patient.dart';
 import 'package:hospital_management_system/ui/components/clear_screen.dart';
 import 'package:hospital_management_system/ui/components/pause_message.dart';
