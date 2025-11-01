@@ -11,24 +11,16 @@ import 'seed_administrators.dart';
 
 Future<void> seedAllStaff() async {
   try {
-    print('Starting to seed all staff...\n');
+    print('\n');
 
     await seedDoctors();
     await seedNurses();
     await seedSecurityStaff();
     await seedCleaners();
     await seedAdministrators();
-
-    print('Seeding departments...');
     await seedDepartments();
-
-    print('Seeding rooms...');
-    await seedRooms();
-
-    print('Seeding roomType...');
     await seedRoomTypes();
-
-    print('Seeding beds...');
+    await seedRooms();
     await seedBeds();
 
     print('\nAll staff seeded successfully!');
