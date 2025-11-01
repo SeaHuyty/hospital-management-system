@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:hospital_management_system/ui/components/pause_message.dart';
 
-import '../../domain/staff.dart';
+import '../../domain/staff/staff_models.dart';
 import '../../data/controllers/authentication.dart';
 
 class Session {
@@ -9,7 +9,7 @@ class Session {
 }
 
 Future<Administrator?> authentication() async {
-  if(Session.currentAdmin != null) {
+  if (Session.currentAdmin != null) {
     return Session.currentAdmin;
   }
 
@@ -18,16 +18,22 @@ Future<Administrator?> authentication() async {
   stdout.write('Enter your password: ');
   String? password = stdin.readLineSync();
 
-  if (username == null || username.isEmpty || password == null || password.isEmpty) {
+  if (username == null ||
+      username.isEmpty ||
+      password == null ||
+      password.isEmpty) {
     print('Username or Password can not be empty.\n System Terminated');
     return null;
   }
 
   AuthenticationController authController = AuthenticationController();
 
-  Administrator? admin = await authController.authenticateAdmin(username, password);
+  Administrator? admin = await authController.authenticateAdmin(
+    username,
+    password,
+  );
 
-  if(admin != null) {
+  if (admin != null) {
     Session.currentAdmin = admin;
     print('\nLogin successful. Welcome, ${admin.username}!');
     pressEnterToContinue();

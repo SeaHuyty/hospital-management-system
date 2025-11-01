@@ -1,5 +1,5 @@
 import 'package:hospital_management_system/data/config/database.dart';
-import 'package:hospital_management_system/domain/staff.dart';
+import 'package:hospital_management_system/domain/staff/staff_models.dart';
 
 class AuthenticationController {
   final DatabaseHelper _dbHelper = DatabaseHelper();
@@ -13,8 +13,8 @@ class AuthenticationController {
         SELECT *
         FROM administrators
         WHERE username = ?
-        ''', 
-        [username]
+        ''',
+        [username],
       );
 
       if (result.isEmpty) return null;
@@ -56,10 +56,13 @@ class AuthenticationController {
   Future<void> _updateLastLogin(int administratorId) async {
     final db = await _dbHelper.database;
 
-    db.execute('''
+    db.execute(
+      '''
       UPDATE administrators
       SET last_login = ?
       WHERE staff_id = ?
-    ''', [DateTime.now().toIso8601String(), administratorId]);
+    ''',
+      [DateTime.now().toIso8601String(), administratorId],
+    );
   }
 }

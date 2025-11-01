@@ -1,6 +1,6 @@
 import 'package:hospital_management_system/data/config/database.dart';
 import 'package:hospital_management_system/data/controllers/staff/staff.dart';
-import 'package:hospital_management_system/domain/staff.dart';
+import 'package:hospital_management_system/domain/staff/staff_models.dart';
 
 class DoctorControllers {
   Future<void> insertDoctor(Doctor doctor) async {

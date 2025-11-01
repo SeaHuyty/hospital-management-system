@@ -1,6 +1,6 @@
 import 'package:hospital_management_system/data/config/database.dart';
 import 'package:hospital_management_system/data/controllers/staff/staff.dart';
-import 'package:hospital_management_system/domain/staff.dart';
+import 'package:hospital_management_system/domain/staff/staff_models.dart';
 
 class AdministratorControllers {
   Future<void> insertAdministrator(Administrator administrator) async {
@@ -55,7 +55,11 @@ class AdministratorControllers {
     }
   }
 
-  Future<bool> updateAdministratorField(String staffId, String fieldName, String newValue) async {
+  Future<bool> updateAdministratorField(
+    String staffId,
+    String fieldName,
+    String newValue,
+  ) async {
     try {
       final db = await DatabaseHelper().database;
 

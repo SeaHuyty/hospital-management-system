@@ -1,5 +1,5 @@
 import '../controllers/staff/doctor.dart';
-import '../../domain/staff.dart';
+import '../../domain/staff/staff_models.dart';
 
 Future<void> seedDoctors() async {
   DoctorControllers doctorController = DoctorControllers();
