@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:hospital_management_system/ui/components/pause_message.dart';
 
 import '../../domain/staff/staff_models.dart';
-import '../../data/controllers/authentication.dart';
+import '../../domain/controllers/authentication.dart';
 
 class Session {
   static Administrator? currentAdmin;

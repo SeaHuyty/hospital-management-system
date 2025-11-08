@@ -1,4 +1,4 @@
-import '../controllers/staff/nurse.dart';
+import '../../domain/controllers/staff/nurse.dart';
 import '../../domain/staff/staff_models.dart';
 
 Future<void> seedNurses() async {

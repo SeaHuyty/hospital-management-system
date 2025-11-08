@@ -1,13 +1,13 @@
 import 'package:test/test.dart';
 import 'package:hospital_management_system/data/config/database.dart';
-import 'package:hospital_management_system/data/controllers/staff/staff.dart';
-import 'package:hospital_management_system/data/controllers/staff/doctor.dart';
-import 'package:hospital_management_system/data/controllers/staff/nurse.dart';
-import 'package:hospital_management_system/data/controllers/staff/security.dart';
-import 'package:hospital_management_system/data/controllers/staff/cleaner.dart';
-import 'package:hospital_management_system/data/controllers/staff/administrator.dart';
-import 'package:hospital_management_system/data/controllers/room/patient.controller.dart';
-import 'package:hospital_management_system/data/controllers/authentication.dart';
+import 'package:hospital_management_system/domain/controllers/staff/staff.dart';
+import 'package:hospital_management_system/domain/controllers/staff/doctor.dart';
+import 'package:hospital_management_system/domain/controllers/staff/nurse.dart';
+import 'package:hospital_management_system/domain/controllers/staff/security.dart';
+import 'package:hospital_management_system/domain/controllers/staff/cleaner.dart';
+import 'package:hospital_management_system/domain/controllers/staff/administrator.dart';
+import 'package:hospital_management_system/domain/controllers/room/patient.controller.dart';
+import 'package:hospital_management_system/domain/controllers/authentication.dart';
 import 'package:hospital_management_system/domain/staff/staff_models.dart';
 import 'package:hospital_management_system/domain/patient.dart';
 

@@ -1,4 +1,4 @@
-import '../controllers/staff/administrator.dart';
+import '../../domain/controllers/staff/administrator.dart';
 import '../../domain/staff/staff_models.dart';
 
 Future<void> seedAdministrators() async {

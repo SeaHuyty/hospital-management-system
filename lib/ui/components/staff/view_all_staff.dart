@@ -1,4 +1,4 @@
-import 'package:hospital_management_system/data/controllers/staff/staff.dart';
+import 'package:hospital_management_system/domain/controllers/staff/staff.dart';
 import 'package:hospital_management_system/domain/staff/staff_models.dart';
 import 'package:hospital_management_system/ui/components/clear_screen.dart';
 import 'package:hospital_management_system/ui/components/table_printer.dart';
