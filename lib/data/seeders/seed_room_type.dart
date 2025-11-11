@@ -1,4 +1,4 @@
-import 'package:hospital_management_system/domain/controllers/room/room_type_controller.dart';
+import 'package:hospital_management_system/data/controllers/room/room_type_controller.dart';
 import 'package:hospital_management_system/domain/hospital_room.dart';
 
 Future<void> seedRoomTypes() async {
